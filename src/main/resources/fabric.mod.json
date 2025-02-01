@@ -8,10 +8,11 @@
 		"Gaura"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/twod_projectiles",
+		"sources": "https://github.com/Gauraaaaaaaa/TwoDProjectiles",
+		"issues": "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
 	},
-	"license": "ARR",
+	"license": "CC BY-NC-ND 4.0",
 	"icon": "assets/twod_projectiles/icon.png",
 	"environment": "*",
 	"entrypoints": {
