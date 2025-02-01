@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,7 +28,7 @@ public abstract class PersistentProjectileEntityMixin {
     private void initPersistentProjectileEntityMixin(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon, CallbackInfo ci) {
 
         PersistentProjectileEntity persistentProjectile = (PersistentProjectileEntity) (Object) this;
-        persistentProjectile.getDataTracker().set(TwoDProjectiles.ARROW_ITEM, stack.copy());
+        persistentProjectile.getDataTracker().set(TwoDProjectiles.ARROW_ITEM, TwoDProjectiles.CONFIG.render_tipped_arrow ? stack.copy() : this.getDefaultItemStack());
     }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))

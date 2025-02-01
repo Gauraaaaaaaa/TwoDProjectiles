@@ -3,17 +3,15 @@ package com.gaura.twod_projectiles.mixin;
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDStuckArrowsFeatureRenderState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.StuckObjectsFeatureRenderer;
-import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,8 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class StuckObjectsFeatureRendererMixin {
 
     @Unique
-    @Nullable
-    private BakedModel model;
+    private final ItemRenderState stack = new ItemRenderState();
 
     @Inject(method = "renderObject", at = @At(value = "HEAD"), cancellable = true)
     private void renderObject(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, float f, float directionX, float directionY, CallbackInfo ci) {
@@ -34,12 +31,7 @@ public class StuckObjectsFeatureRendererMixin {
 
         if (stuckObjectsFeatureRenderer instanceof TwoDStuckArrowsFeatureRenderState twoDStuckArrowsFeatureRenderState) {
 
-            ClientPlayerEntity player = MinecraftClient.getInstance().player;
-
-            if (player != null) {
-
-                this.model = twoDStuckArrowsFeatureRenderState.twoDProjectiles$getItemRenderer().getModel(Items.ARROW.getDefaultStack(), player.getWorld(), null, player.getId());
-            }
+            twoDStuckArrowsFeatureRenderState.twoDProjectiles$getItemModelManager().updateForNonLivingEntity(this.stack, Items.ARROW.getDefaultStack(), ModelTransformationMode.GROUND, MinecraftClient.getInstance().player);
 
             matrixStack.scale(TwoDProjectiles.CONFIG.arrow_stuck_in_player_scale, TwoDProjectiles.CONFIG.arrow_stuck_in_player_scale, TwoDProjectiles.CONFIG.arrow_stuck_in_player_scale);
 
@@ -51,7 +43,7 @@ public class StuckObjectsFeatureRendererMixin {
 
             matrixStack.translate(TwoDProjectiles.CONFIG.bow_x_translation, TwoDProjectiles.CONFIG.bow_y_translation, TwoDProjectiles.CONFIG.bow_z_translation);
 
-            twoDStuckArrowsFeatureRenderState.twoDProjectiles$getItemRenderer().renderItem(Items.ARROW.getDefaultStack(), ModelTransformationMode.GROUND, false, matrixStack, vertexConsumerProvider, light, OverlayTexture.DEFAULT_UV, this.model);
+            this.stack.render(matrixStack, vertexConsumerProvider, light, OverlayTexture.DEFAULT_UV);
 
             ci.cancel();
         }

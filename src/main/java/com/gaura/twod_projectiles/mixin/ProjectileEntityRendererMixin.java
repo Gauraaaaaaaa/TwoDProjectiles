@@ -2,15 +2,14 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDProjectileEntityRenderState;
+import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.ProjectileEntityRenderer;
 import net.minecraft.client.render.entity.state.ProjectileEntityRenderState;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
@@ -24,12 +23,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ProjectileEntityRendererMixin {
 
     @Unique
-    private ItemRenderer itemRenderer;
+    private ItemModelManager itemModelManager;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(EntityRendererFactory.Context context, CallbackInfo ci) {
 
-        this.itemRenderer = context.getItemRenderer();
+        this.itemModelManager = context.getItemModelManager();
     }
 
     @Inject(
@@ -64,7 +63,7 @@ public abstract class ProjectileEntityRendererMixin {
                 matrixStack.translate(TwoDProjectiles.CONFIG.bow_x_translation, TwoDProjectiles.CONFIG.bow_y_translation, TwoDProjectiles.CONFIG.bow_z_translation);
             }
 
-            this.itemRenderer.renderItem(twoDProjectileEntityRenderState.twoDProjectiles$getStack(), ModelTransformationMode.GROUND, false, matrixStack, vertexConsumerProvider, light, OverlayTexture.DEFAULT_UV, twoDProjectileEntityRenderState.twoDProjectiles$getModel());
+            twoDProjectileEntityRenderState.twoDProjectiles$getStack().render(matrixStack, vertexConsumerProvider, light, OverlayTexture.DEFAULT_UV);
             matrixStack.pop();
         }
 
@@ -77,9 +76,7 @@ public abstract class ProjectileEntityRendererMixin {
         if (projectileEntityRenderState instanceof TwoDProjectileEntityRenderState twoDProjectileEntityRenderState) {
 
             twoDProjectileEntityRenderState.twoDProjectiles$setArrowFromCrossbow(persistentProjectileEntity.getDataTracker().get(TwoDProjectiles.ARROW_FROM_CROSSBOW));
-            ItemStack itemStack = persistentProjectileEntity.getItemStack();
-            twoDProjectileEntityRenderState.twoDProjectiles$setStack(itemStack.copy());
-            twoDProjectileEntityRenderState.twoDProjectiles$setModel(!itemStack.isEmpty() ? this.itemRenderer.getModel(itemStack, persistentProjectileEntity.getWorld(), null, persistentProjectileEntity.getId()) : null);
+            this.itemModelManager.updateForNonLivingEntity(twoDProjectileEntityRenderState.twoDProjectiles$getStack(), persistentProjectileEntity.getDataTracker().get(TwoDProjectiles.ARROW_ITEM), ModelTransformationMode.GROUND, persistentProjectileEntity);
         }
     }
 }

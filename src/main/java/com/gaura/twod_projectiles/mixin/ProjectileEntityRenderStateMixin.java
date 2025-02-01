@@ -2,6 +2,7 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.util.TwoDProjectileEntityRenderState;
 import net.minecraft.client.render.entity.state.ProjectileEntityRenderState;
+import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -15,16 +16,7 @@ public class ProjectileEntityRenderStateMixin implements TwoDProjectileEntityRen
     private boolean arrowFromCrossbow;
 
     @Unique
-    @Nullable
-    private BakedModel model;
-
-    @Unique
-    private ItemStack stack;
-
-    public ProjectileEntityRenderStateMixin() {
-
-        this.stack = ItemStack.EMPTY;
-    }
+    private final ItemRenderState stack = new ItemRenderState();
 
     @Override
     public boolean twoDProjectiles$isArrowFromCrossbow() {
@@ -33,13 +25,7 @@ public class ProjectileEntityRenderStateMixin implements TwoDProjectileEntityRen
     }
 
     @Override
-    public @Nullable BakedModel twoDProjectiles$getModel() {
-
-        return model;
-    }
-
-    @Override
-    public ItemStack twoDProjectiles$getStack() {
+    public ItemRenderState twoDProjectiles$getStack() {
 
         return stack;
     }
@@ -48,17 +34,5 @@ public class ProjectileEntityRenderStateMixin implements TwoDProjectileEntityRen
     public void twoDProjectiles$setArrowFromCrossbow(boolean arrowFromCrossbow) {
 
         this.arrowFromCrossbow = arrowFromCrossbow;
-    }
-
-    @Override
-    public void twoDProjectiles$setModel(BakedModel model) {
-
-        this.model = model;
-    }
-
-    @Override
-    public void twoDProjectiles$setStack(ItemStack stack) {
-
-        this.stack = stack;
     }
 }

@@ -13,6 +13,8 @@ public class TwoDProjectilesConfig implements ConfigData {
     public float arrow_stuck_in_player_scale = 1.5F;
     @ConfigEntry.Category("bow_and_crossbow")
     public float arrow_shake_factor = 50.0F;
+    @ConfigEntry.Category("bow_and_crossbow")
+    public boolean render_tipped_arrow = false;
 
     @ConfigEntry.Category("bow")
     public float bow_x_translation = -0.1875F;

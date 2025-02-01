@@ -1,8 +1,8 @@
 package com.gaura.twod_projectiles.util;
 
-import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.item.ItemModelManager;
 
 public interface TwoDStuckArrowsFeatureRenderState {
 
-    ItemRenderer twoDProjectiles$getItemRenderer();
+    ItemModelManager twoDProjectiles$getItemModelManager();
 }
