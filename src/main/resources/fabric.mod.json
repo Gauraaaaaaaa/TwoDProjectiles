@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "twod_projectiles",
+	"version": "${version}",
+	"name": "2D Projectiles",
+	"description": "Replace the arrow 3D model by its 2D item texture model, like the trailers!",
+	"authors": [
+		"Gaura"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "ARR",
+	"icon": "assets/twod_projectiles/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.gaura.twod_projectiles.TwoDProjectiles"
+		],
+		"modmenu": [
+			"com.gaura.twod_projectiles.config.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"twod_projectiles.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.2",
+		"java": ">=21",
+		"fabric-api": "*",
+		"cloth-config": ">=16.0.143"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

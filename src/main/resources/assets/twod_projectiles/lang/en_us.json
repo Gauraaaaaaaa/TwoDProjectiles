@@ -1,0 +1,32 @@
+{
+  "text.autoconfig.twod_projectiles.title": "2D Projectiles",
+
+  "text.autoconfig.twod_projectiles.category.bow_and_crossbow": "Bow & Crossbow",
+  "text.autoconfig.twod_projectiles.option.arrow_scale": "Scale of the arrow model",
+  "text.autoconfig.twod_projectiles.option.arrow_stuck_in_player_scale": "Scale of the arrow model when stuck in a player",
+  "text.autoconfig.twod_projectiles.option.arrow_shake_factor": "Factor of the arrow shake (0 to disable)",
+
+  "text.autoconfig.twod_projectiles.category.bow": "Bow",
+  "text.autoconfig.twod_projectiles.option.bow_x_translation": "X translation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.bow_y_translation": "Y translation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.bow_z_translation": "Z translation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.bow_y_rotation": "Y rotation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.bow_z_rotation": "Z rotation of the arrow model",
+
+  "text.autoconfig.twod_projectiles.category.crossbow": "Crossbow",
+  "text.autoconfig.twod_projectiles.option.flat_arrow_with_crossbow": "Flatten the arrow when shot from a crossbow",
+  "text.autoconfig.twod_projectiles.option.crossbow_x_translation": "X translation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.crossbow_y_translation": "Y translation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.crossbow_z_translation": "Z translation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.crossbow_y_rotation": "Y rotation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.crossbow_x_rotation": "X rotation of the arrow model",
+  "text.autoconfig.twod_projectiles.option.crossbow_z_rotation": "Z rotation of the arrow model",
+
+  "text.autoconfig.twod_projectiles.category.firework_rocket": "Firework Rocket",
+  "text.autoconfig.twod_projectiles.option.firework_rocket_scale": "Scale of the firework rocket model",
+  "text.autoconfig.twod_projectiles.option.firework_rocket_x_translation": "X translation of the firework rocket model",
+  "text.autoconfig.twod_projectiles.option.firework_rocket_y_translation": "Y translation of the firework rocket model",
+  "text.autoconfig.twod_projectiles.option.firework_rocket_z_translation": "Z translation of the firework rocket model",
+  "text.autoconfig.twod_projectiles.option.firework_rocket_y_rotation": "Y rotation of the firework rocket model",
+  "text.autoconfig.twod_projectiles.option.firework_rocket_x_rotation": "X rotation of the firework rocket model"
+}

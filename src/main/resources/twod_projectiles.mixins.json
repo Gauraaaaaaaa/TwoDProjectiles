@@ -1,0 +1,21 @@
+{
+	"required": true,
+	"package": "com.gaura.twod_projectiles.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"CrossbowItemMixin",
+		"EntityInvoker",
+		"PersistentProjectileEntityMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"client": [
+		"FireworkRocketEntityRendererMixin",
+		"FireworkRocketEntityRenderStateMixin",
+		"ProjectileEntityRendererMixin",
+		"ProjectileEntityRenderStateMixin",
+		"StuckArrowsFeatureRendererMixin",
+		"StuckObjectsFeatureRendererMixin"
+	]
+}
