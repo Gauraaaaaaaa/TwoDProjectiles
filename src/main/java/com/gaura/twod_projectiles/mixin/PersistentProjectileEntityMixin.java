@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PersistentProjectileEntity.class)
@@ -26,10 +27,21 @@ public abstract class PersistentProjectileEntityMixin {
             method = "<init>(Lnet/minecraft/entity/EntityType;DDDLnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)V",
             at = @At("TAIL")
     )
-    private void initPersistentProjectileEntityMixin(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon, CallbackInfo ci) {
+    private void initPersistentProjectileEntity(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon, CallbackInfo ci) {
 
         PersistentProjectileEntity persistentProjectile = (PersistentProjectileEntity) (Object) this;
         persistentProjectile.getDataTracker().set(TwoDProjectiles.ARROW_ITEM, stack.copy());
+    }
+
+    @Redirect(
+            method = "tick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;isCritical()Z"
+            )
+    )
+    private boolean removeCriticalParticles(PersistentProjectileEntity instance) {
+        return instance.isCritical() && TwoDProjectiles.CONFIG.render_critical_particles;
     }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))

@@ -3,7 +3,7 @@
 	"id": "twod_projectiles",
 	"version": "${version}",
 	"name": "2D Projectiles",
-	"description": "Replace the arrow 3D model by its 2D item texture model, like the trailers!",
+	"description": "Replace the 3D arrow model with its 2D item texture model, like the Minecraft trailers!",
 	"authors": [
 		"Gaura"
 	],
@@ -12,7 +12,7 @@
 		"sources": "https://github.com/Gauraaaaaaaa/TwoDProjectiles",
 		"issues": "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
 	},
-	"license": "CC BY-NC-ND 4.0",
+	"license": "ARR",
 	"icon": "assets/twod_projectiles/icon.png",
 	"environment": "*",
 	"entrypoints": {

@@ -5,6 +5,7 @@
   "text.autoconfig.twod_projectiles.option.arrow_scale": "Scale of the arrow model",
   "text.autoconfig.twod_projectiles.option.arrow_stuck_in_player_scale": "Scale of the arrow model when stuck in a player",
   "text.autoconfig.twod_projectiles.option.arrow_shake_factor": "Factor of the arrow shake (0 to disable)",
+  "text.autoconfig.twod_projectiles.option.render_critical_particles": "If critical particles should be rendered",
 
   "text.autoconfig.twod_projectiles.category.bow": "Bow",
   "text.autoconfig.twod_projectiles.option.bow_x_translation": "X translation of the arrow model",
