@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "com.gaura.twod_projectiles.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "ArrowLayerMixin",
+    "ArrowRendererMixin",
+    "ArrowRenderStateMixin",
+    "FireworkEntityRendererMixin",
+    "FireworkRocketRenderStateMixin",
+    "StuckInBodyLayerMixin"
+  ],
+  "mixins": [
+    "AbstractArrowMixin",
+    "CrossbowItemMixin",
+    "EntityInvoker",
+    "FireworkRocketEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "text.autoconfig.twod_projectiles.title": "2D Projectiles",
+
+    "text.autoconfig.twod_projectiles.category.arrow": "Arrow",
+    "text.autoconfig.twod_projectiles.option.arrow_direction_list": "Arrow Texture Direction List",
+    "text.autoconfig.twod_projectiles.option.ArrowDirection": "Entry:",
+    "text.autoconfig.twod_projectiles.option.ArrowDirection.arrow": "Namespace:",
+    "text.autoconfig.twod_projectiles.option.ArrowDirection.direction": "Direction of the texture:",
+    "text.autoconfig.twod_projectiles.option.arrow_scale": "Scale of the arrow model",
+    "text.autoconfig.twod_projectiles.option.arrow_offset": "Offset of the arrow model",
+    "text.autoconfig.twod_projectiles.option.arrow_shake_factor": "Factor of the arrow shake power (0 to disable)",
+    "text.autoconfig.twod_projectiles.option.arrow_speed_shake_factor": "Factor of the arrow shake speed (0 to disable)",
+    "text.autoconfig.twod_projectiles.option.arrow_roll": "Degree added every tick to 'roll' the arrow (0 to disable)",
+    "text.autoconfig.twod_projectiles.option.flat_arrow_with_crossbow": "If the arrow should be flat when shot from a crossbow",
+    "text.autoconfig.twod_projectiles.option.render_tipped_arrow": "If tipped arrows should be rendered",
+    "text.autoconfig.twod_projectiles.option.render_critical_particles": "If critical particles should be rendered",
+
+    "text.autoconfig.twod_projectiles.category.firework_rocket": "Firework Rocket",
+    "text.autoconfig.twod_projectiles.option.firework_rocket_sprite_direction": "Direction of the firework rocket texture",
+    "text.autoconfig.twod_projectiles.option.firework_rocket_scale": "Scale of the firework rocket model",
+    "text.autoconfig.twod_projectiles.option.firework_rocket_offset": "Offset of the firework rocket model",
+    "text.autoconfig.twod_projectiles.option.firework_rocket_roll": "Degree added every tick to 'roll' the firework rocket (0 to disable)"
+}
