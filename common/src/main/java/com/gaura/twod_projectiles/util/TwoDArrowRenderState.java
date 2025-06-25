@@ -10,10 +10,6 @@ public interface TwoDArrowRenderState {
 
     void twoDProjectiles$setArrowFromCrossbow(boolean arrowFromCrossbow);
 
-//    ArrayList<Vec3> twod_projectiles$getTrailPoints();
-//
-//    void twod_projectiles$setTrailPoints(ArrayList<Vec3> trailPoints);
-
     float twod_projectiles$getRoll();
 
     void twod_projectiles$setRoll(float roll);
