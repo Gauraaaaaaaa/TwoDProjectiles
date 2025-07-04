@@ -3,13 +3,12 @@ package com.gaura.twod_projectiles;
 import com.gaura.twod_projectiles.config.TwoDProjectilesConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public final class TwoDProjectiles {
 
@@ -19,13 +18,18 @@ public final class TwoDProjectiles {
 
     public static TwoDProjectilesConfig CONFIG = new TwoDProjectilesConfig();
 
-    public static final EntityDataAccessor<ItemStack> ARROW_ITEM = SynchedEntityData.defineId(AbstractArrow.class, EntityDataSerializers.ITEM_STACK);
-
-    public static final EntityDataAccessor<Boolean> ARROW_FROM_CROSSBOW = SynchedEntityData.defineId(AbstractArrow.class, EntityDataSerializers.BOOLEAN);
-
     public static void init() {
 
         AutoConfig.register(TwoDProjectilesConfig.class, JanksonConfigSerializer::new);
         CONFIG = AutoConfig.getConfigHolder(TwoDProjectilesConfig.class).getConfig();
+    }
+
+    public static float getArrowAngle(ItemStack itemStack) {
+
+        return Arrays.stream(CONFIG.arrow_direction_list)
+                .filter(arrowDirection -> itemStack.getItemHolder().is(ResourceLocation.parse(arrowDirection.arrow)))
+                .map(arrowDirection -> arrowDirection.direction.getDegree())
+                .findFirst()
+                .orElse(-45.0F);
     }
 }

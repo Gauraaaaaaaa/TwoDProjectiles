@@ -4,11 +4,7 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 
 public interface TwoDArrowRenderState {
 
-    boolean twoDProjectiles$isArrowFromCrossbow();
-
     ItemStackRenderState twoDProjectiles$getStack();
-
-    void twoDProjectiles$setArrowFromCrossbow(boolean arrowFromCrossbow);
 
     float twod_projectiles$getRoll();
 

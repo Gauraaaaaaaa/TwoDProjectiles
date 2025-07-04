@@ -13,10 +13,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.ArrowRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +30,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Mixin(ArrowRenderer.class)
 public class ArrowRendererMixin {
@@ -74,7 +79,14 @@ public class ArrowRendererMixin {
     )
     private void renderTwoDArrow(ArrowRenderState arrowRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 
-        poseStack.mulPose(Axis.ZP.rotationDegrees(arrowRenderState.xRot + ((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getArrowAngle()));
+        float shake = 0.0F;
+
+        if (arrowRenderState.shake > 0.0F) {
+
+            shake = (-Mth.sin(arrowRenderState.shake * TwoDProjectiles.CONFIG.arrow_shake_speed_factor) * arrowRenderState.shake * TwoDProjectiles.CONFIG.arrow_shake_power_factor) * ((float) Math.PI / 180F);
+        }
+
+        poseStack.mulPose(Axis.ZP.rotationDegrees(arrowRenderState.xRot + shake + ((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getArrowAngle()));
 
         Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
         Quaternionf qZ = Axis.ZP.rotationDegrees(((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getArrowAngle());
@@ -82,11 +94,6 @@ public class ArrowRendererMixin {
 
         Vector3f axis = new Vector3f();
         qCombined.normalizedPositiveZ(axis);
-
-        if (((TwoDArrowRenderState) arrowRenderState).twoDProjectiles$isArrowFromCrossbow() && TwoDProjectiles.CONFIG.flat_arrow_with_crossbow) {
-
-            poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(-90.0F), axis));
-        }
 
         poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getRoll()), axis));
 
@@ -124,25 +131,21 @@ public class ArrowRendererMixin {
     )
     private void updateRenderState(AbstractArrow abstractArrow, ArrowRenderState arrowRenderState, float f, CallbackInfo ci) {
 
-        if (arrowRenderState.shake > 0.0F) {
-
-            arrowRenderState.xRot += (-Mth.sin(arrowRenderState.shake * TwoDProjectiles.CONFIG.arrow_speed_shake_factor) * arrowRenderState.shake * TwoDProjectiles.CONFIG.arrow_shake_factor) * ((float)Math.PI / 180F);
-        }
-
         if (arrowRenderState instanceof TwoDArrowRenderState twoDArrowRenderState) {
 
             twoDArrowRenderState.twod_projectiles$setRoll(((TwoDRollEntity) abstractArrow).twod_projectiles$getRoll(f));
 
-            float angle = Arrays.stream(TwoDProjectiles.CONFIG.arrow_direction_list)
-                    .filter(arrowDirection -> abstractArrow.getEntityData().get(TwoDProjectiles.ARROW_ITEM).getItemHolder().is(ResourceLocation.parse(arrowDirection.arrow)))
-                    .map(arrowDirection -> arrowDirection.direction.getDegree())
-                    .findFirst()
-                    .orElse(-45.0F);
+            ItemStack itemStack = ((AbstractArrowInvoker) abstractArrow).invokeGetPickupItem();
 
-            twoDArrowRenderState.twod_projectiles$setArrowAngle(angle);
+            if (TwoDProjectiles.CONFIG.render_tipped_arrow && abstractArrow instanceof Arrow arrow && arrow.getColor() != -1) {
 
-            twoDArrowRenderState.twoDProjectiles$setArrowFromCrossbow(abstractArrow.getEntityData().get(TwoDProjectiles.ARROW_FROM_CROSSBOW));
-            this.twod_projectiles$itemModelResolver.updateForNonLiving(twoDArrowRenderState.twoDProjectiles$getStack(), abstractArrow.getEntityData().get(TwoDProjectiles.ARROW_ITEM), ItemDisplayContext.GROUND, abstractArrow);
+                itemStack = Items.TIPPED_ARROW.getDefaultInstance();
+                itemStack.set(DataComponents.POTION_CONTENTS, arrow.getPickupItemStackOrigin().getOrDefault(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.of(arrow.getColor()), List.of(), Optional.empty())));
+            }
+
+            twoDArrowRenderState.twod_projectiles$setArrowAngle(TwoDProjectiles.getArrowAngle(itemStack));
+
+            this.twod_projectiles$itemModelResolver.updateForNonLiving(twoDArrowRenderState.twoDProjectiles$getStack(), itemStack, ItemDisplayContext.GROUND, abstractArrow);
         }
     }
 }

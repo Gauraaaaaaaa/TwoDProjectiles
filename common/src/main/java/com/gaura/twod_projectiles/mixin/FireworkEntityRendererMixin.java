@@ -82,7 +82,7 @@ public class FireworkEntityRendererMixin {
                     ordinal = 0
             )
     )
-    private void disableRotation(PoseStack instance, Quaternionf quaternionf) {}
+    private void cancelMulPose(PoseStack instance, Quaternionf quaternionf) {}
 
     @Redirect(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",

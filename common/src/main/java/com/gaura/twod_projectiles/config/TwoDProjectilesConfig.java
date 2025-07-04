@@ -20,11 +20,9 @@ public class TwoDProjectilesConfig implements ConfigData {
     @ConfigEntry.Category("arrow")
     public float arrow_roll = 45.0F;
     @ConfigEntry.Category("arrow")
-    public float arrow_shake_factor = 200.0F;
+    public float arrow_shake_power_factor = 200.0F;
     @ConfigEntry.Category("arrow")
-    public float arrow_speed_shake_factor = 2.0F;
-    @ConfigEntry.Category("arrow")
-    public boolean flat_arrow_with_crossbow = true;
+    public float arrow_shake_speed_factor = 2.0F;
     @ConfigEntry.Category("arrow")
     public boolean render_tipped_arrow = false;
     @ConfigEntry.Category("arrow")

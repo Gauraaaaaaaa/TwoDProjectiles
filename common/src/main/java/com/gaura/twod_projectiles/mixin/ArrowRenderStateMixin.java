@@ -10,9 +10,6 @@ import org.spongepowered.asm.mixin.Unique;
 public class ArrowRenderStateMixin implements TwoDArrowRenderState {
 
     @Unique
-    private boolean twod_projectiles$arrowFromCrossbow;
-
-    @Unique
     private final ItemStackRenderState twod_projectiles$stack = new ItemStackRenderState();
 
     @Unique
@@ -22,21 +19,9 @@ public class ArrowRenderStateMixin implements TwoDArrowRenderState {
     private float twod_projectiles$arrowAngle;
 
     @Override
-    public boolean twoDProjectiles$isArrowFromCrossbow() {
-
-        return twod_projectiles$arrowFromCrossbow;
-    }
-
-    @Override
     public ItemStackRenderState twoDProjectiles$getStack() {
 
         return twod_projectiles$stack;
-    }
-
-    @Override
-    public void twoDProjectiles$setArrowFromCrossbow(boolean arrowFromCrossbow) {
-
-        this.twod_projectiles$arrowFromCrossbow = arrowFromCrossbow;
     }
 
     @Override

@@ -8,10 +8,9 @@
     "text.autoconfig.twod_projectiles.option.ArrowDirection.direction": "Direction of the texture:",
     "text.autoconfig.twod_projectiles.option.arrow_scale": "Scale of the arrow model",
     "text.autoconfig.twod_projectiles.option.arrow_offset": "Offset of the arrow model",
-    "text.autoconfig.twod_projectiles.option.arrow_shake_factor": "Factor of the arrow shake power (0 to disable)",
-    "text.autoconfig.twod_projectiles.option.arrow_speed_shake_factor": "Factor of the arrow shake speed (0 to disable)",
+    "text.autoconfig.twod_projectiles.option.arrow_shake_power_factor": "Factor of the arrow shake power (0 to disable)",
+    "text.autoconfig.twod_projectiles.option.arrow_shake_speed_factor": "Factor of the arrow shake speed (0 to disable)",
     "text.autoconfig.twod_projectiles.option.arrow_roll": "Degree added every tick to 'roll' the arrow (0 to disable)",
-    "text.autoconfig.twod_projectiles.option.flat_arrow_with_crossbow": "If the arrow should be flat when shot from a crossbow",
     "text.autoconfig.twod_projectiles.option.render_tipped_arrow": "If tipped arrows should be rendered",
     "text.autoconfig.twod_projectiles.option.render_critical_particles": "If critical particles should be rendered",
 

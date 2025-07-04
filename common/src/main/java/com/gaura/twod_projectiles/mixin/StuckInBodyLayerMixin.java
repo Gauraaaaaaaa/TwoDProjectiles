@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.StuckInBodyLayer;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.Items;
 import org.joml.Quaternionf;
@@ -22,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Arrays;
 
 @Mixin(StuckInBodyLayer.class)
 public class StuckInBodyLayerMixin {
@@ -54,13 +51,7 @@ public class StuckInBodyLayerMixin {
     )
     private Quaternionf redirectRotationDegrees(Axis instance, float f) {
 
-        float angle = Arrays.stream(TwoDProjectiles.CONFIG.arrow_direction_list)
-                .filter(arrowDirection -> Items.ARROW.getDefaultInstance().getItemHolder().is(ResourceLocation.parse(arrowDirection.arrow)))
-                .map(arrowDirection -> arrowDirection.direction.getDegree())
-                .findFirst()
-                .orElse(-45.0F);
-
-        return Axis.YP.rotationDegrees(f + angle);
+        return Axis.ZP.rotationDegrees(f + TwoDProjectiles.getArrowAngle(Items.ARROW.getDefaultInstance()));
     }
 
     @Inject(
@@ -74,14 +65,8 @@ public class StuckInBodyLayerMixin {
     )
     private void renderTwoDArrow(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, float f, float g, float h, CallbackInfo ci) {
 
-        float angle = Arrays.stream(TwoDProjectiles.CONFIG.arrow_direction_list)
-                .filter(arrowDirection -> Items.ARROW.getDefaultInstance().getItemHolder().is(ResourceLocation.parse(arrowDirection.arrow)))
-                .map(arrowDirection -> arrowDirection.direction.getDegree())
-                .findFirst()
-                .orElse(-45.0F);
-
         float offset = TwoDProjectiles.CONFIG.arrow_offset;
-        float radiansZ = (float) Math.toRadians(angle);
+        float radiansZ = (float) Math.toRadians(TwoDProjectiles.getArrowAngle(Items.ARROW.getDefaultInstance()));
         float offsetX = -(float) Math.cos(radiansZ) * offset;
         float offsetY = (float) Math.sin(radiansZ) * offset;
 
@@ -97,5 +82,5 @@ public class StuckInBodyLayerMixin {
                     target = "Lnet/minecraft/client/model/Model;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"
             )
     )
-    private void redirectRenderToBuffer(Model instance, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j) {}
+    private void cancelRenderToBuffer(Model instance, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j) {}
 }

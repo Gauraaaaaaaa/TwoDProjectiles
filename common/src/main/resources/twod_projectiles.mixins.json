@@ -12,9 +12,8 @@
     "StuckInBodyLayerMixin"
   ],
   "mixins": [
+    "AbstractArrowInvoker",
     "AbstractArrowMixin",
-    "CrossbowItemMixin",
-    "EntityInvoker",
     "FireworkRocketEntityMixin"
   ],
   "injectors": {
