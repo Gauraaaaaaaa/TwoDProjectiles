@@ -28,19 +28,19 @@ public class FireworkEntityRendererMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void render(FireworkRocketRenderState fireworkRocketRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
+    private void renderTwoDFireworkRocket(FireworkRocketRenderState fireworkRocketRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 
-        poseStack.scale(TwoDProjectiles.CONFIG.firework_rocket_scale, TwoDProjectiles.CONFIG.firework_rocket_scale, TwoDProjectiles.CONFIG.firework_rocket_scale);
+        if (TwoDProjectiles.CONFIG.renderTwoDFireworkRocket && fireworkRocketRenderState instanceof TwoDFireworkRocketRenderState twoDFireworkRocketRenderState) {
 
-        if (fireworkRocketRenderState instanceof TwoDFireworkRocketRenderState twoDFireworkRocketRenderState) {
+            poseStack.scale(TwoDProjectiles.CONFIG.fireworkRocketScale, TwoDProjectiles.CONFIG.fireworkRocketScale, TwoDProjectiles.CONFIG.fireworkRocketScale);
 
             if (fireworkRocketRenderState.isShotAtAngle) {
 
                 poseStack.mulPose(Axis.YP.rotationDegrees(twoDFireworkRocketRenderState.twoDProjectiles$getYRot() - 90.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(twoDFireworkRocketRenderState.twoDProjectiles$getXRot() + TwoDProjectiles.CONFIG.firework_rocket_sprite_direction.getDegree()));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(twoDFireworkRocketRenderState.twoDProjectiles$getXRot() + TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree()));
 
                 Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
-                Quaternionf qZ = Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.firework_rocket_sprite_direction.getDegree() + (fireworkRocketRenderState.isShotAtAngle ? 0.0F : 90.0F));
+                Quaternionf qZ = Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree() + (fireworkRocketRenderState.isShotAtAngle ? 0.0F : 90.0F));
                 Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
 
                 Vector3f axis = new Vector3f();
@@ -53,10 +53,10 @@ public class FireworkEntityRendererMixin {
             else {
 
                 poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.firework_rocket_sprite_direction.getDegree() + 90.0F));
+                poseStack.mulPose(Axis.XP.rotationDegrees(TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree() + 90.0F));
 
                 Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
-                Quaternionf qZ = Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.firework_rocket_sprite_direction.getDegree() + 90.0F);
+                Quaternionf qZ = Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree() + 90.0F);
                 Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
 
                 Vector3f axis = new Vector3f();
@@ -64,14 +64,14 @@ public class FireworkEntityRendererMixin {
 
                 poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(twoDFireworkRocketRenderState.twoDProjectiles$getRoll()), axis));
             }
+
+            float offset = TwoDProjectiles.CONFIG.fireworkRocketOffset;
+            float radiansZ = (float) Math.toRadians(TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree());
+            float offsetX = -(float) Math.cos(radiansZ) * offset;
+            float offsetY = (float) Math.sin(radiansZ) * offset;
+
+            poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
         }
-
-        float offset = TwoDProjectiles.CONFIG.firework_rocket_offset;
-        float radiansZ = (float) Math.toRadians(TwoDProjectiles.CONFIG.firework_rocket_sprite_direction.getDegree());
-        float offsetX = -(float) Math.cos(radiansZ) * offset;
-        float offsetY = (float) Math.sin(radiansZ) * offset;
-
-        poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
     }
 
     @Redirect(
@@ -82,7 +82,13 @@ public class FireworkEntityRendererMixin {
                     ordinal = 0
             )
     )
-    private void cancelMulPose(PoseStack instance, Quaternionf quaternionf) {}
+    private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf) {
+
+        if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
+
+            poseStack.mulPose(quaternionf);
+        }
+    }
 
     @Redirect(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
@@ -92,7 +98,13 @@ public class FireworkEntityRendererMixin {
                     ordinal = 1
             )
     )
-    private void cancelRotationDegreesZP(PoseStack instance, Quaternionf quaternionf) {}
+    private void cancelRotationDegreesZP(PoseStack poseStack, Quaternionf quaternionf) {
+
+        if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
+
+            poseStack.mulPose(quaternionf);
+        }
+    }
 
     @Redirect(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
@@ -102,7 +114,13 @@ public class FireworkEntityRendererMixin {
                     ordinal = 2
             )
     )
-    private void cancelRotationDegreesYP(PoseStack instance, Quaternionf quaternionf) {}
+    private void cancelRotationDegreesYP(PoseStack poseStack, Quaternionf quaternionf) {
+
+        if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
+
+            poseStack.mulPose(quaternionf);
+        }
+    }
 
     @Redirect(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
@@ -112,15 +130,21 @@ public class FireworkEntityRendererMixin {
                     ordinal = 3
             )
     )
-    private void cancelRotationDegreesXP(PoseStack instance, Quaternionf quaternionf) {}
+    private void cancelRotationDegreesXP(PoseStack poseStack, Quaternionf quaternionf) {
+
+        if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
+
+            poseStack.mulPose(quaternionf);
+        }
+    }
 
     @Inject(
             method = "extractRenderState(Lnet/minecraft/world/entity/projectile/FireworkRocketEntity;Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;F)V",
             at = @At("TAIL")
     )
-    private void extractRenderState(FireworkRocketEntity fireworkRocketEntity, FireworkRocketRenderState fireworkRocketRenderState, float f, CallbackInfo ci) {
+    private void updateRenderState(FireworkRocketEntity fireworkRocketEntity, FireworkRocketRenderState fireworkRocketRenderState, float f, CallbackInfo ci) {
 
-        if (fireworkRocketRenderState instanceof TwoDFireworkRocketRenderState twoDFireworkRocketRenderState) {
+        if (TwoDProjectiles.CONFIG.renderTwoDFireworkRocket && fireworkRocketRenderState instanceof TwoDFireworkRocketRenderState twoDFireworkRocketRenderState) {
 
             twoDFireworkRocketRenderState.twoDProjectiles$setYRot(fireworkRocketEntity.getYRot(f));
             twoDFireworkRocketRenderState.twoDProjectiles$setXRot(fireworkRocketEntity.getXRot(f));

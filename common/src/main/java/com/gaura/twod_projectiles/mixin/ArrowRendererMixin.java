@@ -3,6 +3,8 @@ package com.gaura.twod_projectiles.mixin;
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
 import com.gaura.twod_projectiles.util.TwoDArrowRenderState;
+import com.gaura.twod_projectiles.util.TwoDThrownTridentRenderState;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -55,7 +57,10 @@ public class ArrowRendererMixin {
     )
     private void updateScale(ArrowRenderState arrowRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 
-        poseStack.scale(TwoDProjectiles.CONFIG.arrow_scale, TwoDProjectiles.CONFIG.arrow_scale, TwoDProjectiles.CONFIG.arrow_scale);
+        if (TwoDProjectiles.CONFIG.renderTwoDArrow) {
+
+            poseStack.scale(TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale);
+        }
     }
 
     @Redirect(
@@ -66,7 +71,24 @@ public class ArrowRendererMixin {
                     ordinal = 1
             )
     )
-    private void cancelRotationDegrees(PoseStack instance, Quaternionf quaternionf) {}
+    private void modifyZPRotationDegrees(PoseStack poseStack, Quaternionf quaternionf, @Local(argsOnly = true) ArrowRenderState arrowRenderState) {
+
+        float shake = 0.0F;
+
+        if (arrowRenderState.shake > 0.0F) {
+
+            shake = (-Mth.sin(arrowRenderState.shake * TwoDProjectiles.CONFIG.arrowShakeSpeedFactor) * arrowRenderState.shake * TwoDProjectiles.CONFIG.arrowShakePowerFactor) * ((float) Math.PI / 180F);
+        }
+
+        if (TwoDProjectiles.CONFIG.renderTwoDArrow && arrowRenderState instanceof TwoDArrowRenderState twoDArrowRenderState) {
+
+            poseStack.mulPose(Axis.ZP.rotationDegrees(arrowRenderState.xRot + shake + twoDArrowRenderState.twod_projectiles$getArrowAngle()));
+        }
+        else {
+
+            poseStack.mulPose(Axis.ZP.rotationDegrees(arrowRenderState.xRot + shake));
+        }
+    }
 
     @Inject(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
@@ -79,32 +101,40 @@ public class ArrowRendererMixin {
     )
     private void renderTwoDArrow(ArrowRenderState arrowRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 
-        float shake = 0.0F;
+        if (arrowRenderState instanceof TwoDArrowRenderState twoDArrowRenderState) {
 
-        if (arrowRenderState.shake > 0.0F) {
+            if (TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
-            shake = (-Mth.sin(arrowRenderState.shake * TwoDProjectiles.CONFIG.arrow_shake_speed_factor) * arrowRenderState.shake * TwoDProjectiles.CONFIG.arrow_shake_power_factor) * ((float) Math.PI / 180F);
+                Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
+                Quaternionf qZ = Axis.ZP.rotationDegrees(twoDArrowRenderState.twod_projectiles$getArrowAngle());
+                Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
+
+                Vector3f axis = new Vector3f();
+                qCombined.normalizedPositiveZ(axis);
+
+                poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(twoDArrowRenderState.twod_projectiles$getRoll()), axis));
+
+                float offset = TwoDProjectiles.CONFIG.arrowOffset;
+                float radiansZ = (float) Math.toRadians(twoDArrowRenderState.twod_projectiles$getArrowAngle());
+                float offsetX = -(float) Math.cos(radiansZ) * offset;
+                float offsetY = (float) Math.sin(radiansZ) * offset;
+
+                poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
+
+                twoDArrowRenderState.twoDProjectiles$getStack().render(poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
+            }
+            else {
+
+                Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
+                Quaternionf qZ = Axis.ZP.rotationDegrees(0.0F);
+                Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
+
+                Vector3f axis = new Vector3f();
+                qCombined.normalizedPositiveZ(axis);
+
+                poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(twoDArrowRenderState.twod_projectiles$getRoll()), axis));
+            }
         }
-
-        poseStack.mulPose(Axis.ZP.rotationDegrees(arrowRenderState.xRot + shake + ((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getArrowAngle()));
-
-        Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
-        Quaternionf qZ = Axis.ZP.rotationDegrees(((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getArrowAngle());
-        Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
-
-        Vector3f axis = new Vector3f();
-        qCombined.normalizedPositiveZ(axis);
-
-        poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getRoll()), axis));
-
-        float offset = TwoDProjectiles.CONFIG.arrow_offset;
-        float radiansZ = (float) Math.toRadians(((TwoDArrowRenderState) arrowRenderState).twod_projectiles$getArrowAngle());
-        float offsetX = -(float) Math.cos(radiansZ) * offset;
-        float offsetY = (float) Math.sin(radiansZ) * offset;
-
-        poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
-
-        ((TwoDArrowRenderState) arrowRenderState).twoDProjectiles$getStack().render(poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
     }
 
     @Redirect(
@@ -114,7 +144,13 @@ public class ArrowRendererMixin {
                     target = "Lnet/minecraft/client/model/ArrowModel;setupAnim(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;)V"
             )
     )
-    private void cancelSetupAnim(ArrowModel instance, ArrowRenderState arrowRenderState) {}
+    private void cancelSetupAnim(ArrowModel arrowModel, ArrowRenderState arrowRenderState) {
+
+//        if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
+//
+//            arrowModel.setupAnim(arrowRenderState);
+//        }
+    }
 
     @Redirect(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
@@ -123,7 +159,13 @@ public class ArrowRendererMixin {
                     target = "Lnet/minecraft/client/model/ArrowModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"
             )
     )
-    private void cancelRenderToBuffer(ArrowModel instance, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j) {}
+    private void cancelRenderToBuffer(ArrowModel arrowModel, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j) {
+
+        if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
+
+            arrowModel.renderToBuffer(poseStack, vertexConsumer, i, j);
+        }
+    }
 
     @Inject(
             method = "extractRenderState(Lnet/minecraft/world/entity/projectile/AbstractArrow;Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;F)V",
@@ -137,7 +179,7 @@ public class ArrowRendererMixin {
 
             ItemStack itemStack = ((AbstractArrowInvoker) abstractArrow).invokeGetPickupItem();
 
-            if (TwoDProjectiles.CONFIG.render_tipped_arrow && abstractArrow instanceof Arrow arrow && arrow.getColor() != -1) {
+            if (TwoDProjectiles.CONFIG.renderTippedArrow && abstractArrow instanceof Arrow arrow && arrow.getColor() != -1) {
 
                 itemStack = Items.TIPPED_ARROW.getDefaultInstance();
                 itemStack.set(DataComponents.POTION_CONTENTS, arrow.getPickupItemStackOrigin().getOrDefault(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.of(arrow.getColor()), List.of(), Optional.empty())));

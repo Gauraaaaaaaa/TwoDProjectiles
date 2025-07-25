@@ -11,4 +11,7 @@ public interface AbstractArrowInvoker {
 
     @Invoker("getPickupItem")
     ItemStack invokeGetPickupItem();
+
+    @Invoker("isInGround")
+    boolean invokeIsInGround();
 }

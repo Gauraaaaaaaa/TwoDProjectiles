@@ -18,12 +18,12 @@ public class FireworkRocketEntityMixin implements TwoDRollEntity {
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
 
-        twod_projectiles$roll += TwoDProjectiles.CONFIG.firework_rocket_roll;
+        twod_projectiles$roll += TwoDProjectiles.CONFIG.fireworkRocketRoll;
     }
 
     @Override
     public float twod_projectiles$getRoll(float f) {
 
-        return (twod_projectiles$roll + f * TwoDProjectiles.CONFIG.firework_rocket_roll) % 360.0F;
+        return (twod_projectiles$roll + f * TwoDProjectiles.CONFIG.fireworkRocketRoll) % 360.0F;
     }
 }

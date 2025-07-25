@@ -26,7 +26,7 @@ public final class TwoDProjectiles {
 
     public static float getArrowAngle(ItemStack itemStack) {
 
-        return Arrays.stream(CONFIG.arrow_direction_list)
+        return Arrays.stream(CONFIG.arrowDirectionList)
                 .filter(arrowDirection -> itemStack.getItemHolder().is(ResourceLocation.parse(arrowDirection.arrow)))
                 .map(arrowDirection -> arrowDirection.direction.getDegree())
                 .findFirst()

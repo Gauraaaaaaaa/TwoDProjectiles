@@ -8,33 +8,58 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class TwoDProjectilesConfig implements ConfigData {
 
     @ConfigEntry.Category("arrow")
-    public ArrowDirection[] arrow_direction_list = {
+    public boolean renderTwoDArrow = true;
+    @ConfigEntry.Category("arrow")
+    public ArrowDirection[] arrowDirectionList = {
             new ArrowDirection("minecraft:arrow", ProjectileDirection.UP_RIGHT),
             new ArrowDirection("minecraft:tipped_arrow", ProjectileDirection.UP_RIGHT),
             new ArrowDirection("minecraft:spectral_arrow", ProjectileDirection.UP_RIGHT),
     };
     @ConfigEntry.Category("arrow")
-    public float arrow_scale = 1.5F;
+    public float arrowScale = 1.5F;
     @ConfigEntry.Category("arrow")
-    public float arrow_offset = 0.15F;
+    public float arrowOffset = 0.15F;
     @ConfigEntry.Category("arrow")
-    public float arrow_roll = 45.0F;
+    public float arrowRoll = 22.5F;
     @ConfigEntry.Category("arrow")
-    public float arrow_shake_power_factor = 200.0F;
+    public float arrowShakePowerFactor = 200.0F;
     @ConfigEntry.Category("arrow")
-    public float arrow_shake_speed_factor = 2.0F;
+    public float arrowShakeSpeedFactor = 2.0F;
     @ConfigEntry.Category("arrow")
-    public boolean render_tipped_arrow = false;
+    public boolean renderTippedArrow = false;
     @ConfigEntry.Category("arrow")
-    public boolean render_critical_particles = false;
+    public boolean renderCriticalParticles = false;
 
-    @ConfigEntry.Category("firework_rocket")
+    @ConfigEntry.Category("fireworkRocket")
+    public boolean renderTwoDFireworkRocket = true;
+    @ConfigEntry.Category("fireworkRocket")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public ProjectileDirection firework_rocket_sprite_direction = ProjectileDirection.UP;
-    @ConfigEntry.Category("firework_rocket")
-    public float firework_rocket_scale = 1.5F;
-    @ConfigEntry.Category("firework_rocket")
-    public float firework_rocket_offset = 0.125F;
-    @ConfigEntry.Category("firework_rocket")
-    public float firework_rocket_roll = 45.0F;
+    public ProjectileDirection fireworkRocketDirection = ProjectileDirection.UP;
+    @ConfigEntry.Category("fireworkRocket")
+    public float fireworkRocketScale = 1.5F;
+    @ConfigEntry.Category("fireworkRocket")
+    public float fireworkRocketOffset = 0.125F;
+    @ConfigEntry.Category("fireworkRocket")
+    public float fireworkRocketRoll = 22.5F;
+
+    @ConfigEntry.Category("trident")
+    public boolean renderTwoDTrident = false;
+    @ConfigEntry.Category("trident")
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    public ProjectileDirection tridentDirection = ProjectileDirection.UP_RIGHT;
+    @ConfigEntry.Category("trident")
+    public float tridentScale = 1.5F;
+    @ConfigEntry.Category("trident")
+    public float tridentOffset = 0.125F;
+    @ConfigEntry.Category("trident")
+    public float tridentRoll = 22.5F;
+    @ConfigEntry.Category("trident")
+    public float tridentShakePowerFactor = 200.0F;
+    @ConfigEntry.Category("trident")
+    public float tridentShakeSpeedFactor = 2.0F;
+
+    @ConfigEntry.Category("thrownItem")
+    public boolean renderTwoDThrownItem = true;
+    @ConfigEntry.Category("thrownItem")
+    public float thrownItemScale = 1.5F;
 }
