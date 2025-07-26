@@ -5,14 +5,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.ArrowLayer;
 import net.minecraft.client.renderer.entity.layers.StuckInBodyLayer;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,16 +25,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class StuckInBodyLayerMixin {
 
     @Unique
-    private final ItemStackRenderState twod_projectiles$stack = new ItemStackRenderState();
+    @Nullable
+    private BakedModel twod_projectiles$bakedModel;
 
     @Inject(method = "renderStuckItem", at = @At(value = "HEAD"), cancellable = true)
     private void renderTwoDStuckArrow(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, float f, float g, float h, CallbackInfo ci) {
 
-        StuckInBodyLayer<? extends PlayerModel> stuckObjectsFeatureRenderer = (StuckInBodyLayer<? extends PlayerModel>) (Object) this;
+        StuckInBodyLayer<? extends PlayerModel> stuckInBodyLayer = (StuckInBodyLayer<? extends PlayerModel>) (Object) this;
 
-        if (TwoDProjectiles.CONFIG.renderTwoDArrow && stuckObjectsFeatureRenderer instanceof ArrowLayer) {
+        if (TwoDProjectiles.CONFIG.renderTwoDArrow && stuckInBodyLayer instanceof ArrowLayer) {
 
-            Minecraft.getInstance().getItemModelResolver().updateForNonLiving(this.twod_projectiles$stack, Items.ARROW.getDefaultInstance(), ItemDisplayContext.GROUND, Minecraft.getInstance().player);
+            LocalPlayer player = Minecraft.getInstance().player;
+
+            if (player != null) {
+
+                this.twod_projectiles$bakedModel = Minecraft.getInstance().getItemRenderer().getModel(Items.ARROW.getDefaultInstance(), player.level(), null, player.getId());
+            }
 
             poseStack.scale(TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale);
 
@@ -50,7 +58,7 @@ public class StuckInBodyLayerMixin {
 
             poseStack.translate(offsetX, -0.125F + offsetY, 0.0F);
 
-            this.twod_projectiles$stack.render(poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
+            Minecraft.getInstance().getItemRenderer().render(Items.ARROW.getDefaultInstance(), ItemDisplayContext.GROUND, false, poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY, this.twod_projectiles$bakedModel);
 
             ci.cancel();
         }

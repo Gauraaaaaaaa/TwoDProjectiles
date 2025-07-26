@@ -11,8 +11,8 @@ import net.minecraft.client.model.ArrowModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.state.ArrowRenderState;
-import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
@@ -38,12 +38,12 @@ import java.util.Optional;
 public class ArrowRendererMixin {
 
     @Unique
-    private ItemModelResolver twod_projectiles$itemModelResolver;
+    private ItemRenderer twod_projectiles$itemRenderer;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(EntityRendererProvider.Context context, CallbackInfo ci) {
 
-        this.twod_projectiles$itemModelResolver = context.getItemModelResolver();
+        this.twod_projectiles$itemRenderer = context.getItemRenderer();
     }
 
     @Inject(
@@ -120,7 +120,7 @@ public class ArrowRendererMixin {
 
                 poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
 
-                twoDArrowRenderState.twoDProjectiles$getStack().render(poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
+                this.twod_projectiles$itemRenderer.render(twoDArrowRenderState.twoDProjectiles$getItemStack(), ItemDisplayContext.GROUND, false, poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY, twoDArrowRenderState.twod_projectiles$getBakedModel());
             }
             else {
 
@@ -180,7 +180,8 @@ public class ArrowRendererMixin {
 
             twoDArrowRenderState.twod_projectiles$setArrowAngle(TwoDProjectiles.getArrowAngle(itemStack));
 
-            this.twod_projectiles$itemModelResolver.updateForNonLiving(twoDArrowRenderState.twoDProjectiles$getStack(), itemStack, ItemDisplayContext.GROUND, abstractArrow);
+            twoDArrowRenderState.twoDProjectiles$setItemStack(itemStack.copy());
+            twoDArrowRenderState.twod_projectiles$setBakedModel(!itemStack.isEmpty() ? this.twod_projectiles$itemRenderer.getModel(itemStack, abstractArrow.level(), null, abstractArrow.getId()) : null);
         }
     }
 }

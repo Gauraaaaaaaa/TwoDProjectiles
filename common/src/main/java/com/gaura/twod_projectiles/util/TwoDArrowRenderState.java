@@ -1,10 +1,17 @@
 package com.gaura.twod_projectiles.util;
 
-import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.item.ItemStack;
 
 public interface TwoDArrowRenderState {
 
-    ItemStackRenderState twoDProjectiles$getStack();
+    ItemStack twoDProjectiles$getItemStack();
+
+    void twoDProjectiles$setItemStack(ItemStack itemStack);
+
+    BakedModel twod_projectiles$getBakedModel();
+
+    void twod_projectiles$setBakedModel(BakedModel bakedModel);
 
     float twod_projectiles$getRoll();
 

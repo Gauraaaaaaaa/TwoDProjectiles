@@ -10,13 +10,14 @@ import com.mojang.math.Axis;
 import net.minecraft.client.model.TridentModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.ThrownTridentRenderer;
 import net.minecraft.client.renderer.entity.state.ThrownTridentRenderState;
-import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,12 +31,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ThrownTridentRendererMixin {
 
     @Unique
-    private ItemModelResolver twod_projectiles$itemModelResolver;
+    private ItemRenderer twod_projectiles$itemRenderer;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(EntityRendererProvider.Context context, CallbackInfo ci) {
 
-        this.twod_projectiles$itemModelResolver = context.getItemModelResolver();
+        this.twod_projectiles$itemRenderer = context.getItemRenderer();
     }
 
     @Inject(
@@ -115,7 +116,7 @@ public class ThrownTridentRendererMixin {
 
                 poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
 
-                twoDThrownTridentRenderState.twoDProjectiles$getStack().render(poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
+                this.twod_projectiles$itemRenderer.render(twoDThrownTridentRenderState.twoDProjectiles$getItemStack(), ItemDisplayContext.GROUND, false, poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY, twoDThrownTridentRenderState.twod_projectiles$getBakedModel());
             }
             else {
 
@@ -158,7 +159,9 @@ public class ThrownTridentRendererMixin {
             twoDThrownTridentRenderState.twod_projectiles$setRoll(((TwoDRollEntity) thrownTrident).twod_projectiles$getRoll(f));
             twoDThrownTridentRenderState.twod_projectiles$setTridentAngle(TwoDProjectiles.CONFIG.tridentDirection.getDegree());
 
-            this.twod_projectiles$itemModelResolver.updateForNonLiving(twoDThrownTridentRenderState.twoDProjectiles$getStack(), thrownTrident.getWeaponItem(), ItemDisplayContext.GROUND, thrownTrident);
+            ItemStack itemStack = thrownTrident.getWeaponItem();
+            twoDThrownTridentRenderState.twoDProjectiles$setItemStack(itemStack.copy());
+            twoDThrownTridentRenderState.twod_projectiles$setBakedModel(!itemStack.isEmpty() ? this.twod_projectiles$itemRenderer.getModel(itemStack, thrownTrident.level(), null, thrownTrident.getId()) : null);
         }
     }
 }

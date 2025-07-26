@@ -2,15 +2,24 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.util.TwoDThrownTridentRenderState;
 import net.minecraft.client.renderer.entity.state.ThrownTridentRenderState;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownTridentRenderState.class)
 public class ThrownTridentRenderStateMixin implements TwoDThrownTridentRenderState {
 
     @Unique
-    private final ItemStackRenderState twod_projectiles$stack = new ItemStackRenderState();
+    private ItemStack twod_projectiles$itemStack;
+
+    @Unique
+    @Nullable
+    private BakedModel twod_projectiles$bakedModel;
 
     @Unique
     private float twod_projectiles$shake;
@@ -22,9 +31,27 @@ public class ThrownTridentRenderStateMixin implements TwoDThrownTridentRenderSta
     private float twod_projectiles$tridentAngle;
 
     @Override
-    public ItemStackRenderState twoDProjectiles$getStack() {
+    public ItemStack twoDProjectiles$getItemStack() {
 
-        return twod_projectiles$stack;
+        return twod_projectiles$itemStack;
+    }
+
+    @Override
+    public void twoDProjectiles$setItemStack(ItemStack itemStack) {
+
+        this.twod_projectiles$itemStack = itemStack;
+    }
+
+    @Override
+    public BakedModel twod_projectiles$getBakedModel() {
+
+        return twod_projectiles$bakedModel;
+    }
+
+    @Override
+    public void twod_projectiles$setBakedModel(BakedModel bakedModel) {
+
+        this.twod_projectiles$bakedModel = bakedModel;
     }
 
     @Override
@@ -61,5 +88,11 @@ public class ThrownTridentRenderStateMixin implements TwoDThrownTridentRenderSta
     public void twod_projectiles$setTridentAngle(float arrowAngle) {
 
         this.twod_projectiles$tridentAngle = arrowAngle;
+    }
+
+    @Inject(method ="<init>", at = @At("TAIL"))
+    private void init(CallbackInfo ci) {
+
+        this.twod_projectiles$itemStack = ItemStack.EMPTY;
     }
 }
