@@ -13,8 +13,4 @@ public interface TwoDThrownTridentRenderState {
     float twod_projectiles$getRoll();
 
     void twod_projectiles$setRoll(float roll);
-
-    float twod_projectiles$getTridentAngle();
-
-    void twod_projectiles$setTridentAngle(float tridentAngle);
 }
