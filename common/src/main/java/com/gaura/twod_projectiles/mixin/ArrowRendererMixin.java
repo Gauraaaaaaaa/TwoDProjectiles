@@ -3,7 +3,6 @@ package com.gaura.twod_projectiles.mixin;
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
 import com.gaura.twod_projectiles.util.TwoDArrowRenderState;
-import com.gaura.twod_projectiles.util.TwoDThrownTridentRenderState;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -144,13 +143,7 @@ public class ArrowRendererMixin {
                     target = "Lnet/minecraft/client/model/ArrowModel;setupAnim(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;)V"
             )
     )
-    private void cancelSetupAnim(ArrowModel arrowModel, ArrowRenderState arrowRenderState) {
-
-//        if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
-//
-//            arrowModel.setupAnim(arrowRenderState);
-//        }
-    }
+    private void cancelSetupAnim(ArrowModel arrowModel, ArrowRenderState arrowRenderState) {}
 
     @Redirect(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",

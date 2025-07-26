@@ -31,7 +31,7 @@
     "text.autoconfig.twod_projectiles.option.tridentShakeSpeedFactor": "Factor of the trident shake speed (0 to disable)",
     "text.autoconfig.twod_projectiles.option.tridentRoll": "Degree added every tick to 'roll' the trident (0 to disable)",
 
-    "text.autoconfig.twod_projectiles.category.thrownItem": "Thrown Item",
-    "text.autoconfig.twod_projectiles.option.renderTwoDThrownItem": "Render 2D Thrown Item (Snowball, Egg, Ender Pearl, etc.)",
-    "text.autoconfig.twod_projectiles.option.thrownItemScale": "Scale of the thrown item model"
+    "text.autoconfig.twod_projectiles.category.projectileItem": "Projectile Item",
+    "text.autoconfig.twod_projectiles.option.renderTwoDProjectileItem": "Render 2D projectile item (Snowball, Egg, Ender Pearl, etc.)",
+    "text.autoconfig.twod_projectiles.option.projectileItemScale": "Scale of the projectile item model"
 }

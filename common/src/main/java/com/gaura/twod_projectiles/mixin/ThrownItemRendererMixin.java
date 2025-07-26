@@ -27,9 +27,9 @@ public class ThrownItemRendererMixin {
     )
     private void updateScale(PoseStack poseStack, float f, float g, float h) {
 
-        if (TwoDProjectiles.CONFIG.renderTwoDThrownItem) {
+        if (TwoDProjectiles.CONFIG.renderTwoDProjectileItem) {
 
-            poseStack.scale(TwoDProjectiles.CONFIG.thrownItemScale, TwoDProjectiles.CONFIG.thrownItemScale, TwoDProjectiles.CONFIG.thrownItemScale);
+            poseStack.scale(TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale);
         }
         else {
 
@@ -46,7 +46,7 @@ public class ThrownItemRendererMixin {
     )
     private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf, @Local(argsOnly = true) ThrownItemRenderState thrownItemRenderState) {
 
-        if (TwoDProjectiles.CONFIG.renderTwoDThrownItem && thrownItemRenderState instanceof TwoDThrownItemRenderState twoDThrownItemRenderState) {
+        if (TwoDProjectiles.CONFIG.renderTwoDProjectileItem && thrownItemRenderState instanceof TwoDThrownItemRenderState twoDThrownItemRenderState) {
 
             poseStack.mulPose(Axis.YP.rotationDegrees(twoDThrownItemRenderState.twod_projectiles$getYRot()));
             poseStack.mulPose(Axis.XN.rotationDegrees(twoDThrownItemRenderState.twod_projectiles$getXRot()));
@@ -63,7 +63,7 @@ public class ThrownItemRendererMixin {
     )
     private void updateRenderState(Entity entity, ThrownItemRenderState thrownItemRenderState, float f, CallbackInfo ci) {
 
-        if (TwoDProjectiles.CONFIG.renderTwoDThrownItem && thrownItemRenderState instanceof TwoDThrownItemRenderState twoDThrownItemRenderState) {
+        if (TwoDProjectiles.CONFIG.renderTwoDProjectileItem && thrownItemRenderState instanceof TwoDThrownItemRenderState twoDThrownItemRenderState) {
 
             twoDThrownItemRenderState.twod_projectiles$setXRot(entity.getXRot(f));
             twoDThrownItemRenderState.twod_projectiles$setYRot(entity.getYRot(f));
