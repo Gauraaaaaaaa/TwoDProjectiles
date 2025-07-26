@@ -3,7 +3,7 @@
   "id": "twod_projectiles",
   "version": "${version}",
   "name": "2D Projectiles",
-  "description": "Replace the 3D arrow model with its 2D item texture model, like the Minecraft trailers!",
+  "description": "Makes projectiles (arrows, firework rockets, etc.) look like the Minecraft trailers!",
   "authors": [
     "Gaura"
   ],
@@ -28,8 +28,8 @@
   ],
   "depends": {
     "fabricloader": ">=0.16.14",
-    "minecraft": "~1.21.4",
+    "minecraft": ">=1.21.5",
     "java": ">=21",
-    "cloth-config": ">=17.0.144"
+    "cloth-config": ">=18.0.145"
   }
 }

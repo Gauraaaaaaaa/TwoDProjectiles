@@ -9,20 +9,20 @@ modId = "twod_projectiles"
 version = "${version}"
 displayName = "2D Projectiles"
 authors = "Gaura"
-description = '''Replace the 3D arrow model with its 2D item texture model, like the Minecraft trailers!'''
+description = '''Makes projectiles (arrows, firework rockets, etc.) look like the Minecraft trailers!'''
 logoFile = "assets/twod_projectiles/icon.png"
 
 [[dependencies.twod_projectiles]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.4,)"
+versionRange = "[21.5,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.twod_projectiles]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.4,)"
+versionRange = "[1.21.5,)"
 ordering = "NONE"
 side = "BOTH"
 

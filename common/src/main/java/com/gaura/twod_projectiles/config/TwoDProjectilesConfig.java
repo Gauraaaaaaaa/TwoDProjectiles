@@ -58,8 +58,8 @@ public class TwoDProjectilesConfig implements ConfigData {
     @ConfigEntry.Category("trident")
     public float tridentShakeSpeedFactor = 2.0F;
 
-    @ConfigEntry.Category("thrownItem")
-    public boolean renderTwoDThrownItem = true;
-    @ConfigEntry.Category("thrownItem")
-    public float thrownItemScale = 1.5F;
+    @ConfigEntry.Category("projectileItem")
+    public boolean renderTwoDProjectileItem = true;
+    @ConfigEntry.Category("projectileItem")
+    public float projectileItemScale = 1.5F;
 }

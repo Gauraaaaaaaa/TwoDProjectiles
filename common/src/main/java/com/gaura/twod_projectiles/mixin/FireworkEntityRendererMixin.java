@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.FireworkEntityRenderer;
 import net.minecraft.client.renderer.entity.state.FireworkRocketRenderState;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -78,15 +79,15 @@ public class FireworkEntityRendererMixin {
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V",
                     ordinal = 0
             )
     )
-    private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf) {
+    private void cancelMulPose(PoseStack poseStack, Quaternionfc quaternionfc) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionf);
+            poseStack.mulPose(quaternionfc);
         }
     }
 
@@ -94,15 +95,15 @@ public class FireworkEntityRendererMixin {
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V",
                     ordinal = 1
             )
     )
-    private void cancelRotationDegreesZP(PoseStack poseStack, Quaternionf quaternionf) {
+    private void cancelRotationDegreesZP(PoseStack poseStack, Quaternionfc quaternionfc) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionf);
+            poseStack.mulPose(quaternionfc);
         }
     }
 
@@ -110,15 +111,15 @@ public class FireworkEntityRendererMixin {
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V",
                     ordinal = 2
             )
     )
-    private void cancelRotationDegreesYP(PoseStack poseStack, Quaternionf quaternionf) {
+    private void cancelRotationDegreesYP(PoseStack poseStack, Quaternionfc quaternionfc) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionf);
+            poseStack.mulPose(quaternionfc);
         }
     }
 
@@ -126,15 +127,15 @@ public class FireworkEntityRendererMixin {
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V",
                     ordinal = 3
             )
     )
-    private void cancelRotationDegreesXP(PoseStack poseStack, Quaternionf quaternionf) {
+    private void cancelRotationDegreesXP(PoseStack poseStack, Quaternionfc quaternionfc) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionf);
+            poseStack.mulPose(quaternionfc);
         }
     }
 

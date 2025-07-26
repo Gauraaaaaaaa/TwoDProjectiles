@@ -18,6 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -58,11 +59,11 @@ public class ThrownTridentRendererMixin {
             method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V",
                     ordinal = 1
             )
     )
-    private void modifyZPRotationDegrees(PoseStack poseStack, Quaternionf quaternionf, @Local(argsOnly = true) ThrownTridentRenderState thrownTridentRenderState) {
+    private void modifyZPRotationDegrees(PoseStack poseStack, Quaternionfc quaternionfc, @Local(argsOnly = true) ThrownTridentRenderState thrownTridentRenderState) {
 
         if (thrownTridentRenderState instanceof TwoDThrownTridentRenderState twoDThrownTridentRenderState) {
 
@@ -88,7 +89,7 @@ public class ThrownTridentRendererMixin {
             method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V",
                     ordinal = 1,
                     shift = At.Shift.AFTER
             )
