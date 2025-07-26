@@ -28,9 +28,9 @@ public class StuckInBodyLayerMixin {
     @Inject(method = "renderStuckItem", at = @At(value = "HEAD"), cancellable = true)
     private void renderTwoDStuckArrow(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, float f, float g, float h, CallbackInfo ci) {
 
-        StuckInBodyLayer<? extends PlayerModel> stuckObjectsFeatureRenderer = (StuckInBodyLayer<? extends PlayerModel>) (Object) this;
+        StuckInBodyLayer<? extends PlayerModel> stuckInBodyLayer = (StuckInBodyLayer<? extends PlayerModel>) (Object) this;
 
-        if (TwoDProjectiles.CONFIG.renderTwoDArrow && stuckObjectsFeatureRenderer instanceof ArrowLayer) {
+        if (TwoDProjectiles.CONFIG.renderTwoDArrow && stuckInBodyLayer instanceof ArrowLayer) {
 
             Minecraft.getInstance().getItemModelResolver().updateForNonLiving(this.twod_projectiles$stack, Items.ARROW.getDefaultInstance(), ItemDisplayContext.GROUND, Minecraft.getInstance().player);
 
