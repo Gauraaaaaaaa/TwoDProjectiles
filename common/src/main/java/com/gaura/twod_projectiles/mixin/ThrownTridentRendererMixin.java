@@ -76,11 +76,11 @@ public class ThrownTridentRendererMixin {
 
             if (TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
-                poseStack.mulPose(Axis.ZP.rotationDegrees(thrownTridentRenderState.xRot + shake + twoDThrownTridentRenderState.twod_projectiles$getTridentAngle()));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(thrownTridentRenderState.xRot + shake + TwoDProjectiles.CONFIG.tridentDirection.getDegree()));
             }
             else {
 
-                poseStack.mulPose(Axis.ZP.rotationDegrees(thrownTridentRenderState.xRot + 90.0F + shake));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(thrownTridentRenderState.xRot + shake + 90.0F));
             }
         }
     }
@@ -101,7 +101,7 @@ public class ThrownTridentRendererMixin {
             if (TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
                 Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
-                Quaternionf qZ = Axis.ZP.rotationDegrees(twoDThrownTridentRenderState.twod_projectiles$getTridentAngle());
+                Quaternionf qZ = Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.tridentDirection.getDegree());
                 Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
 
                 Vector3f axis = new Vector3f();
@@ -110,7 +110,7 @@ public class ThrownTridentRendererMixin {
                 poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(twoDThrownTridentRenderState.twod_projectiles$getRoll()), axis));
 
                 float offset = TwoDProjectiles.CONFIG.tridentOffset;
-                float radiansZ = (float) Math.toRadians(twoDThrownTridentRenderState.twod_projectiles$getTridentAngle());
+                float radiansZ = (float) Math.toRadians(TwoDProjectiles.CONFIG.tridentDirection.getDegree());
                 float offsetX = -(float) Math.cos(radiansZ) * offset;
                 float offsetY = (float) Math.sin(radiansZ) * offset;
 
@@ -157,7 +157,6 @@ public class ThrownTridentRendererMixin {
 
             twoDThrownTridentRenderState.twod_projectiles$setShake((float) thrownTrident.shakeTime - f);
             twoDThrownTridentRenderState.twod_projectiles$setRoll(((TwoDRollEntity) thrownTrident).twod_projectiles$getRoll(f));
-            twoDThrownTridentRenderState.twod_projectiles$setTridentAngle(TwoDProjectiles.CONFIG.tridentDirection.getDegree());
 
             this.twod_projectiles$itemModelResolver.updateForNonLiving(twoDThrownTridentRenderState.twoDProjectiles$getStack(), thrownTrident.getWeaponItem(), ItemDisplayContext.GROUND, thrownTrident);
         }

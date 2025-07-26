@@ -37,11 +37,11 @@ public class StuckInBodyLayerMixin {
             poseStack.scale(TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale);
 
             float j = Mth.sqrt(f * f + h * h);
-            float k = (float) (Math.atan2(f, h) * (double) (180F / (float) Math.PI));
-            float l = (float) (Math.atan2(g, j) * (double) (180F / (float) Math.PI));
+            float yRot = (float) (Math.atan2(f, h) * (double) (180F / (float) Math.PI));
+            float xRot = (float) (Math.atan2(g, j) * (double) (180F / (float) Math.PI));
 
-            poseStack.mulPose(Axis.YP.rotationDegrees(k - 90.0F));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(l + TwoDProjectiles.getArrowAngle(Items.ARROW.getDefaultInstance())));
+            poseStack.mulPose(Axis.YP.rotationDegrees(yRot - 90.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(xRot + TwoDProjectiles.getArrowAngle(Items.ARROW.getDefaultInstance())));
 
             float offset = TwoDProjectiles.CONFIG.arrowOffset;
             float radiansZ = (float) Math.toRadians(TwoDProjectiles.getArrowAngle(Items.ARROW.getDefaultInstance()));

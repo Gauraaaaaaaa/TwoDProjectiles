@@ -1,5 +1,6 @@
 package com.gaura.twod_projectiles;
 
+import com.gaura.twod_projectiles.config.ProjectileDirection;
 import com.gaura.twod_projectiles.config.TwoDProjectilesConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
@@ -30,6 +31,6 @@ public final class TwoDProjectiles {
                 .filter(arrowDirection -> itemStack.getItemHolder().is(ResourceLocation.parse(arrowDirection.arrow)))
                 .map(arrowDirection -> arrowDirection.direction.getDegree())
                 .findFirst()
-                .orElse(-45.0F);
+                .orElse(ProjectileDirection.UP_RIGHT.getDegree());
     }
 }

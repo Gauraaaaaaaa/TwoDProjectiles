@@ -18,9 +18,6 @@ public class ThrownTridentRenderStateMixin implements TwoDThrownTridentRenderSta
     @Unique
     private float twod_projectiles$roll;
 
-    @Unique
-    private float twod_projectiles$tridentAngle;
-
     @Override
     public ItemStackRenderState twoDProjectiles$getStack() {
 
@@ -49,17 +46,5 @@ public class ThrownTridentRenderStateMixin implements TwoDThrownTridentRenderSta
     public void twod_projectiles$setRoll(float roll) {
 
         this.twod_projectiles$roll = roll;
-    }
-
-    @Override
-    public float twod_projectiles$getTridentAngle() {
-
-        return twod_projectiles$tridentAngle;
-    }
-
-    @Override
-    public void twod_projectiles$setTridentAngle(float arrowAngle) {
-
-        this.twod_projectiles$tridentAngle = arrowAngle;
     }
 }
