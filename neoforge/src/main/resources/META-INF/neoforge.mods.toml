@@ -26,12 +26,5 @@ versionRange = "[1.21.4,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.twod_projectiles]]
-modId = "architectury"
-type = "required"
-versionRange = "[15.0.3,)"
-ordering = "AFTER"
-side = "BOTH"
-
 [[mixins]]
 config = "twod_projectiles.mixins.json"

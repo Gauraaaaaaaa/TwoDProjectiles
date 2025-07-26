@@ -54,7 +54,7 @@ public class TwoDProjectilesConfig implements ConfigData {
     @ConfigEntry.Category("trident")
     public float tridentRoll = 22.5F;
     @ConfigEntry.Category("trident")
-    public float tridentShakePowerFactor = 200.0F;
+    public float tridentShakePowerFactor = 100.0F;
     @ConfigEntry.Category("trident")
     public float tridentShakeSpeedFactor = 2.0F;
 

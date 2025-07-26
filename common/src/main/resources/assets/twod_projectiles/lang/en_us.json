@@ -27,6 +27,8 @@
     "text.autoconfig.twod_projectiles.option.tridentDirection": "Direction of the trident texture",
     "text.autoconfig.twod_projectiles.option.tridentScale": "Scale of the trident model",
     "text.autoconfig.twod_projectiles.option.tridentOffset": "Offset of the trident model",
+    "text.autoconfig.twod_projectiles.option.tridentShakePowerFactor": "Factor of the trident shake power (0 to disable)",
+    "text.autoconfig.twod_projectiles.option.tridentShakeSpeedFactor": "Factor of the trident shake speed (0 to disable)",
     "text.autoconfig.twod_projectiles.option.tridentRoll": "Degree added every tick to 'roll' the trident (0 to disable)",
 
     "text.autoconfig.twod_projectiles.category.thrownItem": "Thrown Item",
