@@ -4,6 +4,7 @@ import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,7 +34,7 @@ public abstract class AbstractArrowMixin implements TwoDRollEntity {
 
         AbstractArrow abstractArrow = (AbstractArrow) (Object) this;
 
-        if (!((AbstractArrowInvoker) abstractArrow).invokeIsInGround()) {
+        if (!((AbstractArrowInvoker) abstractArrow).isInGround()) {
 
             twod_projectiles$roll += (float) (TwoDProjectiles.CONFIG.arrowRoll * abstractArrow.getDeltaMovement().length());
         }
@@ -44,7 +45,7 @@ public abstract class AbstractArrowMixin implements TwoDRollEntity {
 
         AbstractArrow abstractArrow = (AbstractArrow) (Object) this;
 
-        if (((AbstractArrowInvoker) abstractArrow).invokeIsInGround()) {
+        if (((AbstractArrowInvoker) abstractArrow).isInGround()) {
 
             return twod_projectiles$roll % 360.0F;
         }

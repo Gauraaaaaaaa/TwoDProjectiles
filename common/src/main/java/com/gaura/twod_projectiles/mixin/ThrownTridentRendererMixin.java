@@ -2,8 +2,6 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
-import com.gaura.twod_projectiles.util.TwoDThrownTridentRenderState;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -12,19 +10,15 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.ThrownTridentRenderer;
-import net.minecraft.client.renderer.entity.state.ThrownTridentRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownTridentRenderer.class)
@@ -40,14 +34,14 @@ public class ThrownTridentRendererMixin {
     }
 
     @Inject(
-            method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            method = "render(Lnet/minecraft/world/entity/projectile/ThrownTrident;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V",
                     shift = At.Shift.AFTER
             )
     )
-    private void updateScale(ThrownTridentRenderState thrownTridentRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
+    private void updateScale(ThrownTrident thrownTrident, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 
         if (TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
@@ -55,38 +49,27 @@ public class ThrownTridentRendererMixin {
         }
     }
 
-    @Redirect(
-            method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+    @ModifyConstant(
+            method = "render(Lnet/minecraft/world/entity/projectile/ThrownTrident;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            constant = @Constant(
+                    floatValue = 90.0F,
                     ordinal = 1
             )
     )
-    private void modifyZPRotationDegrees(PoseStack poseStack, Quaternionf quaternionf, @Local(argsOnly = true) ThrownTridentRenderState thrownTridentRenderState) {
+    private float modifyZPRotationDegrees(float f) {
 
-        if (thrownTridentRenderState instanceof TwoDThrownTridentRenderState twoDThrownTridentRenderState) {
+        if (TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
-            float shake = 0.0F;
+            return TwoDProjectiles.CONFIG.tridentDirection.getDegree();
+        }
+        else {
 
-            if (twoDThrownTridentRenderState.twod_projectiles$getShake() > 0.0F) {
-
-                shake = (-Mth.sin(twoDThrownTridentRenderState.twod_projectiles$getShake() * TwoDProjectiles.CONFIG.tridentShakeSpeedFactor) * twoDThrownTridentRenderState.twod_projectiles$getShake() * TwoDProjectiles.CONFIG.tridentShakePowerFactor) * ((float) Math.PI / 180F);
-            }
-
-            if (TwoDProjectiles.CONFIG.renderTwoDTrident) {
-
-                poseStack.mulPose(Axis.ZP.rotationDegrees(thrownTridentRenderState.xRot + shake + twoDThrownTridentRenderState.twod_projectiles$getTridentAngle()));
-            }
-            else {
-
-                poseStack.mulPose(Axis.ZP.rotationDegrees(thrownTridentRenderState.xRot + 90.0F + shake));
-            }
+            return f;
         }
     }
 
     @Inject(
-            method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            method = "render(Lnet/minecraft/world/entity/projectile/ThrownTrident;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
@@ -94,46 +77,51 @@ public class ThrownTridentRendererMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void renderTwoDTrident(ThrownTridentRenderState thrownTridentRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
+    private void renderTwoDTrident(ThrownTrident thrownTrident, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 
-        if (thrownTridentRenderState instanceof TwoDThrownTridentRenderState twoDThrownTridentRenderState) {
+        float s = (float) thrownTrident.shakeTime - g;
 
-            if (TwoDProjectiles.CONFIG.renderTwoDTrident) {
+        if (s > 0.0F) {
 
-                Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
-                Quaternionf qZ = Axis.ZP.rotationDegrees(twoDThrownTridentRenderState.twod_projectiles$getTridentAngle());
-                Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
+            float t = (-Mth.sin(s * TwoDProjectiles.CONFIG.tridentShakeSpeedFactor) * s * TwoDProjectiles.CONFIG.tridentShakePowerFactor) * ((float) Math.PI / 180F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(t));
+        }
 
-                Vector3f axis = new Vector3f();
-                qCombined.normalizedPositiveZ(axis);
+        if (TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
-                poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(twoDThrownTridentRenderState.twod_projectiles$getRoll()), axis));
+            Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
+            Quaternionf qZ = Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.tridentDirection.getDegree());
+            Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
 
-                float offset = TwoDProjectiles.CONFIG.tridentOffset;
-                float radiansZ = (float) Math.toRadians(twoDThrownTridentRenderState.twod_projectiles$getTridentAngle());
-                float offsetX = -(float) Math.cos(radiansZ) * offset;
-                float offsetY = (float) Math.sin(radiansZ) * offset;
+            Vector3f axis = new Vector3f();
+            qCombined.normalizedPositiveZ(axis);
 
-                poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
+            poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(((TwoDRollEntity) thrownTrident).twod_projectiles$getRoll(g)), axis));
 
-                this.twod_projectiles$itemRenderer.render(twoDThrownTridentRenderState.twoDProjectiles$getItemStack(), ItemDisplayContext.GROUND, false, poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY, twoDThrownTridentRenderState.twod_projectiles$getBakedModel());
-            }
-            else {
+            float offset = TwoDProjectiles.CONFIG.tridentOffset;
+            float radiansZ = (float) Math.toRadians(TwoDProjectiles.CONFIG.tridentDirection.getDegree());
+            float offsetX = -(float) Math.cos(radiansZ) * offset;
+            float offsetY = (float) Math.sin(radiansZ) * offset;
 
-                Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
-                Quaternionf qZ = Axis.ZP.rotationDegrees(90.0F);
-                Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
+            poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
 
-                Vector3f axis = new Vector3f();
-                qCombined.normalizedPositiveZ(axis);
+            this.twod_projectiles$itemRenderer.renderStatic(thrownTrident.getWeaponItem(), ItemDisplayContext.GROUND, i, OverlayTexture.NO_OVERLAY, poseStack, multiBufferSource, thrownTrident.level(), thrownTrident.getId());
+        }
+        else {
 
-                poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(twoDThrownTridentRenderState.twod_projectiles$getRoll()), axis));
-            }
+            Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
+            Quaternionf qZ = Axis.ZP.rotationDegrees(90.0F);
+            Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
+
+            Vector3f axis = new Vector3f();
+            qCombined.normalizedPositiveZ(axis);
+
+            poseStack.mulPose(new Quaternionf().rotationAxis((float) Math.toRadians(((TwoDRollEntity) thrownTrident).twod_projectiles$getRoll(g)), axis));
         }
     }
 
     @Redirect(
-            method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            method = "render(Lnet/minecraft/world/entity/projectile/ThrownTrident;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/model/TridentModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"
@@ -144,24 +132,6 @@ public class ThrownTridentRendererMixin {
         if (!TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
             tridentModel.renderToBuffer(poseStack, vertexConsumer, i, j);
-        }
-    }
-
-    @Inject(
-            method = "extractRenderState(Lnet/minecraft/world/entity/projectile/ThrownTrident;Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;F)V",
-            at = @At(value = "TAIL")
-    )
-    private void extractRenderState(ThrownTrident thrownTrident, ThrownTridentRenderState thrownTridentRenderState, float f, CallbackInfo ci) {
-
-        if (thrownTridentRenderState instanceof TwoDThrownTridentRenderState twoDThrownTridentRenderState) {
-
-            twoDThrownTridentRenderState.twod_projectiles$setShake((float) thrownTrident.shakeTime - f);
-            twoDThrownTridentRenderState.twod_projectiles$setRoll(((TwoDRollEntity) thrownTrident).twod_projectiles$getRoll(f));
-            twoDThrownTridentRenderState.twod_projectiles$setTridentAngle(TwoDProjectiles.CONFIG.tridentDirection.getDegree());
-
-            ItemStack itemStack = thrownTrident.getWeaponItem();
-            twoDThrownTridentRenderState.twoDProjectiles$setItemStack(itemStack.copy());
-            twoDThrownTridentRenderState.twod_projectiles$setBakedModel(!itemStack.isEmpty() ? this.twod_projectiles$itemRenderer.getModel(itemStack, thrownTrident.level(), null, thrownTrident.getId()) : null);
         }
     }
 }

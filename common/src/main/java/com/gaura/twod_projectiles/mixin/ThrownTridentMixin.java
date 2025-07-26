@@ -20,7 +20,7 @@ public class ThrownTridentMixin implements TwoDRollEntity {
 
         ThrownTrident thrownTrident = (ThrownTrident) (Object) this;
 
-        if (!((AbstractArrowInvoker) thrownTrident).invokeIsInGround()) {
+        if (!((AbstractArrowInvoker) thrownTrident).isInGround()) {
 
             twod_projectiles$roll += (float) (TwoDProjectiles.CONFIG.tridentRoll * thrownTrident.getDeltaMovement().length());
         }
@@ -31,7 +31,7 @@ public class ThrownTridentMixin implements TwoDRollEntity {
 
         ThrownTrident thrownTrident = (ThrownTrident) (Object) this;
 
-        if (((AbstractArrowInvoker) thrownTrident).invokeIsInGround()) {
+        if (((AbstractArrowInvoker) thrownTrident).isInGround()) {
 
             return twod_projectiles$roll % 360.0F;
         }

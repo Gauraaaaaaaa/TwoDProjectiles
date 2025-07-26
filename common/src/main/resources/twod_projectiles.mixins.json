@@ -4,15 +4,11 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "ArrowLayerMixin",
     "ArrowRendererMixin",
-    "ArrowRenderStateMixin",
     "FireworkEntityRendererMixin",
-    "FireworkRocketRenderStateMixin",
-    "StuckInBodyLayerMixin",
     "ThrownItemRendererMixin",
-    "ThrownItemRenderStateMixin",
-    "ThrownTridentRendererMixin",
-    "ThrownTridentRenderStateMixin"
+    "ThrownTridentRendererMixin"
   ],
   "mixins": [
     "AbstractArrowInvoker",

@@ -15,14 +15,14 @@ logoFile = "assets/twod_projectiles/icon.png"
 [[dependencies.twod_projectiles]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.2,)"
+versionRange = "[21.0,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.twod_projectiles]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.2,)"
+versionRange = "[1.21.0,)"
 ordering = "NONE"
 side = "BOTH"
 
