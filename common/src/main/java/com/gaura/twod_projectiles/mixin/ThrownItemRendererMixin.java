@@ -40,7 +40,8 @@ public class ThrownItemRendererMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V"
+                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    ordinal = 0
             )
     )
     private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf) {
@@ -56,6 +57,7 @@ public class ThrownItemRendererMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
+                    ordinal = 1,
                     shift = At.Shift.AFTER
             )
     )
@@ -64,7 +66,7 @@ public class ThrownItemRendererMixin {
         if (TwoDProjectiles.CONFIG.renderTwoDProjectileItem) {
 
             poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(g, entity.yRotO, entity.getYRot())));
-            poseStack.mulPose(Axis.XN.rotationDegrees(Mth.lerp(g, entity.xRotO, entity.getXRot())));
+            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(g, entity.xRotO, entity.getXRot())));
         }
     }
 }

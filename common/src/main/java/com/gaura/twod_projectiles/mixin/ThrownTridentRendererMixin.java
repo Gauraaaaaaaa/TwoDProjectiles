@@ -105,7 +105,7 @@ public class ThrownTridentRendererMixin {
 
             poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
 
-            this.twod_projectiles$itemRenderer.renderStatic(thrownTrident.getWeaponItem(), ItemDisplayContext.GROUND, i, OverlayTexture.NO_OVERLAY, poseStack, multiBufferSource, thrownTrident.level(), thrownTrident.getId());
+            this.twod_projectiles$itemRenderer.renderStatic(((AbstractArrowInvoker) thrownTrident).invokeGetPickupItem(), ItemDisplayContext.GROUND, i, OverlayTexture.NO_OVERLAY, poseStack, multiBufferSource, thrownTrident.level(), thrownTrident.getId());
         }
         else {
 
@@ -124,14 +124,14 @@ public class ThrownTridentRendererMixin {
             method = "render(Lnet/minecraft/world/entity/projectile/ThrownTrident;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/model/TridentModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"
+                    target = "Lnet/minecraft/client/model/TridentModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"
             )
     )
-    private void cancelRenderToBuffer(TridentModel tridentModel, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j) {
+    private void cancelRenderToBuffer(TridentModel tridentModel, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, float f, float g, float h, float k) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
-            tridentModel.renderToBuffer(poseStack, vertexConsumer, i, j);
+            tridentModel.renderToBuffer(poseStack, vertexConsumer, i, j, f, g, h, k);
         }
     }
 }
