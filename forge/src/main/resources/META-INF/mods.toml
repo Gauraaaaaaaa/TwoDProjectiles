@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[2,)"
+loaderVersion = "[47,)"
 modURL = "https://modrinth.com/mod/twod_projectiles"
 issueTrackerURL = "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
 license = "ARR"
@@ -8,23 +8,20 @@ license = "ARR"
 modId = "twod_projectiles"
 version = "${version}"
 displayName = "2D Projectiles"
-authors = "Gaura"
+authors = "Gaura!"
 description = '''Makes projectiles (arrows, firework rockets, etc.) look like the Minecraft trailers!'''
 logoFile = "assets/twod_projectiles/icon.png"
 
 [[dependencies.twod_projectiles]]
-modId = "neoforge"
-type = "required"
-versionRange = "[20.5,)"
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.twod_projectiles]]
 modId = "minecraft"
-type = "required"
-versionRange = "[1.20.5,)"
+mandatory = true
+versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"
-
-[[mixins]]
-config = "twod_projectiles.mixins.json"

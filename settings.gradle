@@ -11,4 +11,4 @@ rootProject.name = 'twod_projectiles'
 
 include 'common'
 include 'fabric'
-include 'neoforge'
+include 'forge'

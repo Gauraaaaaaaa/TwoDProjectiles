@@ -11,23 +11,20 @@ import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionContents;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
-import java.util.Optional;
 
 @Mixin(ArrowRenderer.class)
 public class ArrowRendererMixin {
@@ -74,7 +71,7 @@ public class ArrowRendererMixin {
             if (TwoDProjectiles.CONFIG.renderTippedArrow && abstractArrow instanceof Arrow arrow && arrow.getColor() != -1) {
 
                 itemStack = Items.TIPPED_ARROW.getDefaultInstance();
-                itemStack.set(DataComponents.POTION_CONTENTS, arrow.getPickupItemStackOrigin().getOrDefault(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.of(arrow.getColor()), List.of())));
+                itemStack.getOrCreateTag().putInt("CustomPotionColor", arrow.getColor());
             }
 
             return axis.rotationDegrees(f + TwoDProjectiles.getArrowAngle(itemStack));
@@ -169,7 +166,7 @@ public class ArrowRendererMixin {
             if (TwoDProjectiles.CONFIG.renderTippedArrow && abstractArrow instanceof Arrow arrow && arrow.getColor() != -1) {
 
                 itemStack = Items.TIPPED_ARROW.getDefaultInstance();
-                itemStack.set(DataComponents.POTION_CONTENTS, arrow.getPickupItemStackOrigin().getOrDefault(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.of(arrow.getColor()), List.of())));
+                itemStack.getOrCreateTag().putInt("CustomPotionColor", arrow.getColor());
             }
 
             float angle = TwoDProjectiles.getArrowAngle(itemStack);
@@ -222,7 +219,7 @@ public class ArrowRendererMixin {
     }
 
     @Inject(method = "vertex", at = @At("HEAD"), cancellable = true)
-    private void cancelVertex(PoseStack.Pose pose, VertexConsumer vertexConsumer, int i, int j, int k, float f, float g, int l, int m, int n, int o, CallbackInfo ci) {
+    private void cancelVertex(Matrix4f matrix4f, Matrix3f matrix3f, VertexConsumer vertexConsumer, int i, int j, int k, float f, float g, int l, int m, int n, int o, CallbackInfo ci) {
 
         if (TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
