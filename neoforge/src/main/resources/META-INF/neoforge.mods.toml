@@ -2,7 +2,7 @@ modLoader = "javafml"
 loaderVersion = "[4,)"
 modURL = "https://modrinth.com/mod/twod_projectiles"
 issueTrackerURL = "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
-license = "ARR"
+license = "GPL-3.0"
 
 [[mods]]
 modId = "twod_projectiles"

@@ -12,7 +12,7 @@
     "sources": "https://github.com/Gauraaaaaaaa/TwoDProjectiles",
     "issues": "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
   },
-  "license": "ARR",
+  "license": "GPL-3.0",
   "icon": "assets/twod_projectiles/icon.png",
   "environment": "client",
   "entrypoints": {

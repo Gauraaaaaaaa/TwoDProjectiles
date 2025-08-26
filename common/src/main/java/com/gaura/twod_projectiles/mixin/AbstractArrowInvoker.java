@@ -1,6 +1,5 @@
 package com.gaura.twod_projectiles.mixin;
 
-
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
