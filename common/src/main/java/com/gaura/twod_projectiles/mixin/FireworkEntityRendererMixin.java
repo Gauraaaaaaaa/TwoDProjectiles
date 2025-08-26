@@ -3,6 +3,8 @@ package com.gaura.twod_projectiles.mixin;
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDFireworkRocketRenderState;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +17,6 @@ import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FireworkEntityRenderer.class)
@@ -57,7 +58,7 @@ public class FireworkEntityRendererMixin {
                 poseStack.mulPose(Axis.XP.rotationDegrees(TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree() + 90.0F));
 
                 Quaternionf qY = Axis.YP.rotationDegrees(-90.0F);
-                Quaternionf qZ = Axis.ZP.rotationDegrees(TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree() + 90.0F);
+                Quaternionf qZ = Axis.XP.rotationDegrees(TwoDProjectiles.CONFIG.fireworkRocketDirection.getDegree() + 90.0F);
                 Quaternionf qCombined = new Quaternionf(qY).mul(qZ);
 
                 Vector3f axis = new Vector3f();
@@ -75,7 +76,7 @@ public class FireworkEntityRendererMixin {
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
@@ -83,15 +84,15 @@ public class FireworkEntityRendererMixin {
                     ordinal = 0
             )
     )
-    private void cancelMulPose(PoseStack poseStack, Quaternionfc quaternionfc) {
+    private void cancelMulPose(PoseStack poseStack, Quaternionfc quaternionfc, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionfc);
+            original.call(poseStack, quaternionfc);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
@@ -99,15 +100,15 @@ public class FireworkEntityRendererMixin {
                     ordinal = 1
             )
     )
-    private void cancelRotationDegreesZP(PoseStack poseStack, Quaternionfc quaternionfc) {
+    private void cancelRotationDegreesZP(PoseStack poseStack, Quaternionfc quaternionfc, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionfc);
+            original.call(poseStack, quaternionfc);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
@@ -115,15 +116,15 @@ public class FireworkEntityRendererMixin {
                     ordinal = 2
             )
     )
-    private void cancelRotationDegreesYP(PoseStack poseStack, Quaternionfc quaternionfc) {
+    private void cancelRotationDegreesYP(PoseStack poseStack, Quaternionfc quaternionfc, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionfc);
+            original.call(poseStack, quaternionfc);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/FireworkRocketRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
@@ -131,11 +132,11 @@ public class FireworkEntityRendererMixin {
                     ordinal = 3
             )
     )
-    private void cancelRotationDegreesXP(PoseStack poseStack, Quaternionfc quaternionfc) {
+    private void cancelRotationDegreesXP(PoseStack poseStack, Quaternionfc quaternionfc, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDFireworkRocket) {
 
-            poseStack.mulPose(quaternionfc);
+            original.call(poseStack, quaternionfc);
         }
     }
 

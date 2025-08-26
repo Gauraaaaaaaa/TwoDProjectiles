@@ -2,6 +2,7 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,15 +16,19 @@ public class FireworkRocketEntityMixin implements TwoDRollEntity {
     @Unique
     private float twod_projectiles$roll = 0.0F;
 
+    @Unique
+    private final int twod_projectiles$random = RandomSource.create().nextBoolean() ? 1 : -1;
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
 
-        twod_projectiles$roll += TwoDProjectiles.CONFIG.fireworkRocketRoll;
+        this.twod_projectiles$roll += this.twod_projectiles$random * TwoDProjectiles.CONFIG.fireworkRocketRoll;
     }
 
     @Override
     public float twod_projectiles$getRoll(float f) {
 
-        return (twod_projectiles$roll + f * TwoDProjectiles.CONFIG.fireworkRocketRoll) % 360.0F;
+        float interpolated = this.twod_projectiles$roll + (this.twod_projectiles$random * TwoDProjectiles.CONFIG.fireworkRocketRoll * f);
+        return interpolated % 360.0F;
     }
 }

@@ -3,6 +3,8 @@ package com.gaura.twod_projectiles.mixin;
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
 import com.gaura.twod_projectiles.util.TwoDArrowRenderState;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -23,13 +25,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import org.joml.Quaternionf;
-import org.joml.Quaternionfc;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -63,15 +63,15 @@ public class ArrowRendererMixin {
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionfc;)V",
+                    target = "Lcom/mojang/math/Axis;rotationDegrees(F)Lorg/joml/Quaternionf;",
                     ordinal = 1
             )
     )
-    private void modifyZPRotationDegrees(PoseStack poseStack, Quaternionfc quaternionfc, @Local(argsOnly = true) ArrowRenderState arrowRenderState) {
+    private Quaternionf modifyZPRotationDegrees(Axis axis, float f, Operation<Quaternionf> original, @Local(argsOnly = true) ArrowRenderState arrowRenderState) {
 
         float shake = 0.0F;
 
@@ -82,11 +82,11 @@ public class ArrowRendererMixin {
 
         if (TwoDProjectiles.CONFIG.renderTwoDArrow && arrowRenderState instanceof TwoDArrowRenderState twoDArrowRenderState) {
 
-            poseStack.mulPose(Axis.ZP.rotationDegrees(arrowRenderState.xRot + shake + twoDArrowRenderState.twod_projectiles$getArrowAngle()));
+            return original.call(axis, f + shake + twoDArrowRenderState.twod_projectiles$getArrowAngle());
         }
         else {
 
-            poseStack.mulPose(Axis.ZP.rotationDegrees(arrowRenderState.xRot + shake));
+            return original.call(axis, f + shake);
         }
     }
 
@@ -137,27 +137,27 @@ public class ArrowRendererMixin {
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/model/ArrowModel;setupAnim(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;)V"
             )
     )
-    private void cancelSetupAnim(ArrowModel arrowModel, ArrowRenderState arrowRenderState) {}
+    private void cancelSetupAnim(ArrowModel instance, ArrowRenderState f, Operation<Void> original) {}
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/model/ArrowModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"
             )
     )
-    private void cancelRenderToBuffer(ArrowModel arrowModel, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j) {
+    private void cancelRenderToBuffer(ArrowModel arrowModel, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int overlayTexture, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
-            arrowModel.renderToBuffer(poseStack, vertexConsumer, i, j);
+            original.call(arrowModel, poseStack, vertexConsumer, i, overlayTexture);
         }
     }
 
