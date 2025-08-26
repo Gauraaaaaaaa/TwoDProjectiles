@@ -2,6 +2,8 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -57,7 +59,7 @@ public class ArrowRendererMixin {
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
@@ -65,7 +67,7 @@ public class ArrowRendererMixin {
                     ordinal = 1
             )
     )
-    private Quaternionf modifyZPRotationDegrees(Axis axis, float f, @Local(argsOnly = true) AbstractArrow abstractArrow) {
+    private Quaternionf modifyZPRotationDegrees(Axis axis, float f, Operation<Quaternionf> original, @Local(argsOnly = true) AbstractArrow abstractArrow) {
 
         if (TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
@@ -77,11 +79,11 @@ public class ArrowRendererMixin {
                 itemStack.set(DataComponents.POTION_CONTENTS, arrow.getPickupItemStackOrigin().getOrDefault(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.of(arrow.getColor()), List.of())));
             }
 
-            return axis.rotationDegrees(f + TwoDProjectiles.getArrowAngle(itemStack));
+            return original.call(axis, f + TwoDProjectiles.getArrowAngle(itemStack));
         }
         else {
 
-            return axis.rotationDegrees(f);
+            return original.call(axis, f);
         }
     }
 
@@ -94,19 +96,19 @@ public class ArrowRendererMixin {
         return TwoDProjectiles.CONFIG.arrowShakeSpeedFactor;
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/util/Mth;sin(F)F"
             )
     )
-    private float modifyShakePowerFactor(float f) {
+    private float modifyShakePowerFactor(float f, Operation<Float> original) {
 
-        return (-Mth.sin(f) * TwoDProjectiles.CONFIG.arrowShakePowerFactor) * (Mth.PI / 180F);
+        return (original.call(f) * TwoDProjectiles.CONFIG.arrowShakePowerFactor) * (Mth.PI / 180F);
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
@@ -114,41 +116,41 @@ public class ArrowRendererMixin {
                     ordinal = 3
             )
     )
-    private void cancelXPRotationDegreesFirst(PoseStack poseStack, Quaternionf quaternionf) {
+    private void cancelXPRotationDegreesFirst(PoseStack poseStack, Quaternionf quaternionf, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
-            poseStack.mulPose(quaternionf);
+            original.call(poseStack, quaternionf);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"
             )
     )
-    private void cancelScale(PoseStack poseStack, float x, float y, float z) {
+    private void cancelScale(PoseStack poseStack, float x, float y, float z, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
-            poseStack.scale(x, y, z);
+            original.call(poseStack, x, y, z);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"
             )
     )
-    private void cancelTranslate(PoseStack poseStack, float x, float y, float z, @Local(argsOnly = true) AbstractArrow abstractArrow) {
+    private void cancelTranslate(PoseStack poseStack, float x, float y, float z, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
-            poseStack.translate(x, y, z);
+            original.call(poseStack, x, y, z);
         }
     }
 
@@ -205,7 +207,7 @@ public class ArrowRendererMixin {
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
@@ -213,11 +215,11 @@ public class ArrowRendererMixin {
                     ordinal = 4
             )
     )
-    private void cancelXPRotationDegreesSecond(PoseStack poseStack, Quaternionf quaternionf) {
+    private void cancelXPRotationDegreesSecond(PoseStack poseStack, Quaternionf quaternionf, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
-            poseStack.mulPose(quaternionf);
+            original.call(poseStack, quaternionf);
         }
     }
 

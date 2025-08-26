@@ -2,6 +2,8 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -120,18 +122,18 @@ public class ThrownTridentRendererMixin {
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/world/entity/projectile/ThrownTrident;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/model/TridentModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"
             )
     )
-    private void cancelRenderToBuffer(TridentModel tridentModel, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j) {
+    private void cancelRenderToBuffer(TridentModel tridentModel, PoseStack poseStack, VertexConsumer vertexConsumer, int i, int overlayTexture, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDTrident) {
 
-            tridentModel.renderToBuffer(poseStack, vertexConsumer, i, j);
+            original.call(tridentModel, poseStack, vertexConsumer, i, overlayTexture);
         }
     }
 }
