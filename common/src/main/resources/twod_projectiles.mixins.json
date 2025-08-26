@@ -4,21 +4,20 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "AbstractArrowInvoker",
+    "AbstractArrowMixin",
     "ArrowRendererMixin",
     "ArrowRenderStateMixin",
     "FireworkEntityRendererMixin",
+    "FireworkRocketEntityMixin",
     "FireworkRocketRenderStateMixin",
     "StuckInBodyLayerMixin",
     "ThrownItemRendererMixin",
     "ThrownItemRenderStateMixin",
+    "ThrownTridentMixin",
     "ThrownTridentRendererMixin",
-    "ThrownTridentRenderStateMixin"
-  ],
-  "mixins": [
-    "AbstractArrowInvoker",
-    "AbstractArrowMixin",
-    "FireworkRocketEntityMixin",
-    "ThrownTridentMixin"
+    "ThrownTridentRenderStateMixin",
+    "entity_pin_cushions.PinCushionLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

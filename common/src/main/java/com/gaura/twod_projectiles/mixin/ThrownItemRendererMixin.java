@@ -2,6 +2,8 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDThrownItemRenderState;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -12,48 +14,47 @@ import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownItemRenderer.class)
 public class ThrownItemRendererMixin {
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownItemRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"
             )
     )
-    private void updateScale(PoseStack poseStack, float f, float g, float h) {
+    private void updateScale(PoseStack poseStack, float x, float y, float z, Operation<Void> original) {
 
         if (TwoDProjectiles.CONFIG.renderTwoDProjectileItem) {
 
-            poseStack.scale(TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale);
+            original.call(poseStack, TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale);
         }
         else {
 
-            poseStack.scale(f, g, h);
+            original.call(poseStack, x, y, z);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render(Lnet/minecraft/client/renderer/entity/state/ThrownItemRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V"
             )
     )
-    private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf, @Local(argsOnly = true) ThrownItemRenderState thrownItemRenderState) {
+    private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf, Operation<Void> original, @Local(argsOnly = true) ThrownItemRenderState thrownItemRenderState) {
 
         if (TwoDProjectiles.CONFIG.renderTwoDProjectileItem && thrownItemRenderState instanceof TwoDThrownItemRenderState twoDThrownItemRenderState) {
 
-            poseStack.mulPose(Axis.YP.rotationDegrees(twoDThrownItemRenderState.twod_projectiles$getYRot()));
-            poseStack.mulPose(Axis.XN.rotationDegrees(twoDThrownItemRenderState.twod_projectiles$getXRot()));
+            poseStack.mulPose(Axis.YP.rotationDegrees(twoDThrownItemRenderState.twod_projectiles$getYRot() - 180.0F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(twoDThrownItemRenderState.twod_projectiles$getXRot()));
         }
         else {
 
-            poseStack.mulPose(quaternionf);
+            original.call(poseStack, quaternionf);
         }
     }
 

@@ -2,6 +2,7 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.util.TwoDThrownItemRenderState;
 import net.minecraft.client.renderer.entity.state.ThrownItemRenderState;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

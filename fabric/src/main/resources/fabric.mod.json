@@ -3,7 +3,7 @@
   "id": "twod_projectiles",
   "version": "${version}",
   "name": "2D Projectiles",
-  "description": "Makes projectiles (arrows, firework rockets, etc.) look like the Minecraft trailers!",
+  "description": "Makes projectiles (arrows, firework rockets, trident, etc.) look 2D!",
   "authors": [
     "Gaura"
   ],
@@ -14,9 +14,9 @@
   },
   "license": "ARR",
   "icon": "assets/twod_projectiles/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "com.gaura.twod_projectiles.fabric.TwoDProjectilesFabric"
     ],
     "modmenu": [
