@@ -1,6 +1,8 @@
 package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -11,32 +13,31 @@ import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownItemRenderer.class)
 public class ThrownItemRendererMixin {
 
-    @Redirect(
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"
             )
     )
-    private void updateScale(PoseStack poseStack, float f, float g, float h) {
+    private void updateScale(PoseStack poseStack, float x, float y, float z, Operation<Void> original) {
 
         if (TwoDProjectiles.CONFIG.renderTwoDProjectileItem) {
 
-            poseStack.scale(TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale);
+            original.call(poseStack, TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale, TwoDProjectiles.CONFIG.projectileItemScale);
         }
         else {
 
-            poseStack.scale(f, g, h);
+            original.call(poseStack, x, y, z);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
@@ -44,11 +45,11 @@ public class ThrownItemRendererMixin {
                     ordinal = 0
             )
     )
-    private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf) {
+    private void cancelMulPose(PoseStack poseStack, Quaternionf quaternionf, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDProjectileItem) {
 
-            poseStack.mulPose(quaternionf);
+            original.call(poseStack, quaternionf);
         }
     }
 

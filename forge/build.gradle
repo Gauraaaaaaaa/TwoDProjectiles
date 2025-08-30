@@ -31,12 +31,15 @@ configurations {
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:$rootProject.forge_version"
+    forge("net.minecraftforge:forge:$rootProject.forge_version")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 
     modApi("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
+
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixin_extras_version}"))
+    implementation(include("io.github.llamalad7:mixinextras-forge:${project.mixin_extras_version}"))
 }
 
 processResources {

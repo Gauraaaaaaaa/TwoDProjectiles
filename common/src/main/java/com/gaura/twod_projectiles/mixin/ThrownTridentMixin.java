@@ -2,7 +2,12 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +20,15 @@ public class ThrownTridentMixin implements TwoDRollEntity {
     @Unique
     private float twod_projectiles$roll = 0.0F;
 
+    @Unique
+    private int twod_projectiles$random;
+
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("RETURN"))
+    private void onInit(EntityType<ThrownTrident> entityType, Level level, CallbackInfo ci) {
+
+        this.twod_projectiles$random = RandomSource.create().nextBoolean() ? 1 : -1;
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
 
@@ -22,7 +36,7 @@ public class ThrownTridentMixin implements TwoDRollEntity {
 
         if (!((AbstractArrowInvoker) thrownTrident).isInGround()) {
 
-            twod_projectiles$roll += (float) (TwoDProjectiles.CONFIG.tridentRoll * thrownTrident.getDeltaMovement().length());
+            this.twod_projectiles$roll += (float) (this.twod_projectiles$random * TwoDProjectiles.CONFIG.tridentRoll * thrownTrident.getDeltaMovement().length());
         }
     }
 
@@ -33,12 +47,12 @@ public class ThrownTridentMixin implements TwoDRollEntity {
 
         if (((AbstractArrowInvoker) thrownTrident).isInGround()) {
 
-            return twod_projectiles$roll % 360.0F;
+            return this.twod_projectiles$roll % 360.0F;
         }
         else {
 
             float speed = (float) thrownTrident.getDeltaMovement().length();
-            float interpolated = twod_projectiles$roll + (TwoDProjectiles.CONFIG.tridentRoll * speed * f);
+            float interpolated = this.twod_projectiles$roll + (this.twod_projectiles$random * TwoDProjectiles.CONFIG.tridentRoll * speed * f);
             return interpolated % 360.0F;
         }
     }

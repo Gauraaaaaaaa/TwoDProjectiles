@@ -2,31 +2,43 @@ package com.gaura.twod_projectiles.mixin;
 
 import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.gaura.twod_projectiles.util.TwoDRollEntity;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin implements TwoDRollEntity {
+public class AbstractArrowMixin implements TwoDRollEntity {
 
     @Unique
     private float twod_projectiles$roll = 0.0F;
 
-    @Redirect(
+    @Unique
+    private int twod_projectiles$random;
+
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("RETURN"))
+    private void onInit(EntityType<AbstractArrow> entityType, Level level, CallbackInfo ci) {
+
+        this.twod_projectiles$random = RandomSource.create().nextBoolean() ? 1 : -1;
+    }
+
+    @WrapOperation(
             method = "tick",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;isCritArrow()Z"
             )
     )
-    private boolean removeCriticalParticles(AbstractArrow abstractArrow) {
+    private boolean removeCriticalParticles(AbstractArrow abstractArrow, Operation<Boolean> original) {
 
-        return abstractArrow.isCritArrow() && TwoDProjectiles.CONFIG.renderCriticalParticles;
+        return original.call(abstractArrow) && TwoDProjectiles.CONFIG.renderCriticalParticles;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -36,7 +48,7 @@ public abstract class AbstractArrowMixin implements TwoDRollEntity {
 
         if (!((AbstractArrowInvoker) abstractArrow).isInGround()) {
 
-            twod_projectiles$roll += (float) (TwoDProjectiles.CONFIG.arrowRoll * abstractArrow.getDeltaMovement().length());
+            this.twod_projectiles$roll += (float) (this.twod_projectiles$random * TwoDProjectiles.CONFIG.arrowRoll * abstractArrow.getDeltaMovement().length());
         }
     }
 
@@ -47,12 +59,12 @@ public abstract class AbstractArrowMixin implements TwoDRollEntity {
 
         if (((AbstractArrowInvoker) abstractArrow).isInGround()) {
 
-            return twod_projectiles$roll % 360.0F;
+            return this.twod_projectiles$roll % 360.0F;
         }
         else {
 
             float speed = (float) abstractArrow.getDeltaMovement().length();
-            float interpolated = twod_projectiles$roll + (TwoDProjectiles.CONFIG.arrowRoll * speed * f);
+            float interpolated = this.twod_projectiles$roll + (this.twod_projectiles$random * TwoDProjectiles.CONFIG.arrowRoll * speed * f);
             return interpolated % 360.0F;
         }
     }

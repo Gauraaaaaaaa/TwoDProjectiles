@@ -2,14 +2,14 @@ modLoader = "javafml"
 loaderVersion = "[47,)"
 modURL = "https://modrinth.com/mod/twod_projectiles"
 issueTrackerURL = "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
-license = "ARR"
+license = "GPL-3.0"
 
 [[mods]]
 modId = "twod_projectiles"
 version = "${version}"
 displayName = "2D Projectiles"
 authors = "Gaura!"
-description = '''Makes projectiles (arrows, firework rockets, etc.) look like the Minecraft trailers!'''
+description = '''Makes projectiles (arrows, firework rockets, trident, etc.) look 2D!'''
 logoFile = "assets/twod_projectiles/icon.png"
 
 [[dependencies.twod_projectiles]]
@@ -17,11 +17,11 @@ modId = "forge"
 mandatory = true
 versionRange = "[47,)"
 ordering = "NONE"
-side = "BOTH"
+side = "CLIENT"
 
 [[dependencies.twod_projectiles]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.20.1,)"
 ordering = "NONE"
-side = "BOTH"
+side = "CLIENT"
