@@ -4,8 +4,7 @@ import com.gaura.twod_projectiles.TwoDProjectiles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.ArrowLayer;
 import net.minecraft.client.renderer.entity.layers.StuckInBodyLayer;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
@@ -25,10 +24,10 @@ public class StuckInBodyLayerMixin {
     @Unique
     private final ItemStackRenderState twod_projectiles$stack = new ItemStackRenderState();
 
-    @Inject(method = "renderStuckItem", at = @At(value = "HEAD"), cancellable = true)
-    private void renderTwoDStuckArrow(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, float f, float g, float h, CallbackInfo ci) {
+    @Inject(method = "submitStuckItem", at = @At(value = "HEAD"), cancellable = true)
+    private void renderTwoDStuckArrow(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, float f, float g, float h, int outlineColor, CallbackInfo ci) {
 
-        StuckInBodyLayer<? extends PlayerModel> stuckInBodyLayer = (StuckInBodyLayer<? extends PlayerModel>) (Object) this;
+        StuckInBodyLayer<?, ?> stuckInBodyLayer = (StuckInBodyLayer<?, ?>) (Object) this;
 
         if (TwoDProjectiles.CONFIG.renderTwoDArrow && stuckInBodyLayer instanceof ArrowLayer) {
 
@@ -36,9 +35,9 @@ public class StuckInBodyLayerMixin {
 
             poseStack.scale(TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale, TwoDProjectiles.CONFIG.arrowScale);
 
-            float j = Mth.sqrt(f * f + h * h);
-            float yRot = (float) (Math.atan2(f, h) * (double) (180F / (float) Math.PI));
-            float xRot = (float) (Math.atan2(g, j) * (double) (180F / (float) Math.PI));
+            float k = Mth.sqrt(f * f + h * h);
+            float yRot = (float) (Math.atan2(f, h) * (double) (180F / (float)Math.PI));
+            float xRot = (float) (Math.atan2(g, k) * (double) (180F / (float)Math.PI));
 
             poseStack.mulPose(Axis.YP.rotationDegrees(yRot - 90.0F));
             poseStack.mulPose(Axis.ZP.rotationDegrees(xRot + TwoDProjectiles.getArrowAngle(Items.ARROW.getDefaultInstance())));
@@ -50,7 +49,7 @@ public class StuckInBodyLayerMixin {
 
             poseStack.translate(offsetX, -0.125F + offsetY, 0.0F);
 
-            this.twod_projectiles$stack.render(poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
+            this.twod_projectiles$stack.submit(poseStack, submitNodeCollector, lightCoords, OverlayTexture.NO_OVERLAY, outlineColor);
 
             ci.cancel();
         }
