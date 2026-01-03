@@ -4,7 +4,7 @@ import com.gaura.twod_projectiles.config.ProjectileDirection;
 import com.gaura.twod_projectiles.config.TwoDProjectilesConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public final class TwoDProjectiles {
     public static float getArrowAngle(ItemStack itemStack) {
 
         return Arrays.stream(CONFIG.arrowDirectionList)
-                .filter(arrowDirection -> itemStack.getItemHolder().is(ResourceLocation.parse(arrowDirection.arrow)))
+                .filter(arrowDirection -> itemStack.getItemHolder().is(Identifier.parse(arrowDirection.arrow)))
                 .map(arrowDirection -> arrowDirection.direction.getDegree())
                 .findFirst()
                 .orElse(ProjectileDirection.UP_RIGHT.getDegree());

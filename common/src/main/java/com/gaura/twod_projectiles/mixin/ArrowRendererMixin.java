@@ -9,7 +9,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.model.object.projectile.ArrowModel;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -20,8 +21,8 @@ import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -123,7 +124,6 @@ public class ArrowRendererMixin {
 
                 poseStack.translate(offsetX, offsetY - 0.125F, 0.0F);
 
-//                twoDArrowRenderState.twoDProjectiles$getStack().render(poseStack, multiBufferSource, i, OverlayTexture.NO_OVERLAY);
                 twoDArrowRenderState.twoDProjectiles$getStack().submit(poseStack, submitNodeCollector, arrowRenderState.lightCoords, OverlayTexture.NO_OVERLAY, arrowRenderState.outlineColor);
             }
             else {
@@ -140,23 +140,14 @@ public class ArrowRendererMixin {
         }
     }
 
-//    @WrapOperation(
-//            method = "render(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-//            at = @At(
-//                    value = "INVOKE",
-//                    target = "Lnet/minecraft/client/model/ArrowModel;setupAnim(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;)V"
-//            )
-//    )
-//    private void cancelSetupAnim(ArrowModel instance, ArrowRenderState f, Operation<Void> original) {}
-
     @WrapOperation(
             method = "submit(Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/RenderType;IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"
+                    target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"
             )
     )
-    private void cancelRenderToBuffer(SubmitNodeCollector submitNodeCollector, Model<ArrowRenderState> model, Object object, PoseStack poseStack, RenderType renderType, int lightCoords, int overlayTexture, int outlineColor, ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, Operation<Void> original) {
+    private void cancelRenderToBuffer(SubmitNodeCollector submitNodeCollector, Model<ArrowModel> model, Object object, PoseStack poseStack, RenderType renderType, int lightCoords, int overlayTexture, int outlineColor, ModelFeatureRenderer.CrumblingOverlay crumblingOverlay, Operation<Void> original) {
 
         if (!TwoDProjectiles.CONFIG.renderTwoDArrow) {
 
@@ -165,7 +156,7 @@ public class ArrowRendererMixin {
     }
 
     @Inject(
-            method = "extractRenderState(Lnet/minecraft/world/entity/projectile/AbstractArrow;Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;F)V",
+            method = "extractRenderState(Lnet/minecraft/world/entity/projectile/arrow/AbstractArrow;Lnet/minecraft/client/renderer/entity/state/ArrowRenderState;F)V",
             at = @At("TAIL")
     )
     private void updateRenderState(AbstractArrow abstractArrow, ArrowRenderState arrowRenderState, float f, CallbackInfo ci) {

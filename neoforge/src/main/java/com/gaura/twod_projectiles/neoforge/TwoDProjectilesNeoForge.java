@@ -1,7 +1,7 @@
 package com.gaura.twod_projectiles.neoforge;
 
 import com.gaura.twod_projectiles.config.TwoDProjectilesConfig;
-import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 
@@ -17,7 +17,7 @@ public final class TwoDProjectilesNeoForge {
 
         ModLoadingContext.get().registerExtensionPoint(
                 IConfigScreenFactory.class,
-                () -> (client, parent) -> AutoConfig.getConfigScreen(TwoDProjectilesConfig.class, parent).get()
+                () -> (client, parent) -> AutoConfigClient.getConfigScreen(TwoDProjectilesConfig.class, parent).get()
         );
     }
 }
