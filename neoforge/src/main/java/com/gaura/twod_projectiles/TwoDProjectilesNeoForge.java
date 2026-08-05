@@ -1,11 +1,10 @@
-package com.gaura.twod_projectiles.neoforge;
+package com.gaura.twod_projectiles;
 
 import com.gaura.twod_projectiles.config.TwoDProjectilesConfig;
 import me.shedaniel.autoconfig.AutoConfigClient;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 
-import com.gaura.twod_projectiles.TwoDProjectiles;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @Mod(TwoDProjectiles.MOD_ID)

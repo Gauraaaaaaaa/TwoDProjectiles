@@ -1,35 +1,35 @@
 {
-  "schemaVersion": 1,
-  "id": "twod_projectiles",
-  "version": "${version}",
-  "name": "2D Projectiles",
-  "description": "Makes projectiles (arrows, firework rockets, trident, etc.) look 2D!",
-  "authors": [
-    "Gaura"
-  ],
-  "contact": {
-    "homepage": "https://modrinth.com/mod/twod_projectiles",
-    "sources": "https://github.com/Gauraaaaaaaa/TwoDProjectiles",
-    "issues": "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
-  },
-  "license": "GPL-3.0",
-  "icon": "assets/twod_projectiles/icon.png",
-  "environment": "client",
-  "entrypoints": {
-    "client": [
-      "com.gaura.twod_projectiles.fabric.TwoDProjectilesFabric"
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
     ],
-    "modmenu": [
-      "com.gaura.twod_projectiles.fabric.config.ModMenuIntegration"
-    ]
-  },
-  "mixins": [
-    "twod_projectiles.mixins.json"
-  ],
-  "depends": {
-    "fabricloader": ">=0.18.4",
-    "minecraft": ">=1.21.11",
-    "java": ">=21",
-    "cloth-config": ">=21.11.153"
-  }
+    "contact": {
+        "homepage": "https://modrinth.com/mod/twod_projectiles",
+        "sources": "https://github.com/Gauraaaaaaaa/TwoDProjectiles",
+        "issues": "https://github.com/Gauraaaaaaaa/TwoDProjectiles/issues"
+    },
+    "license": "${license}",
+    "icon": "assets/twod_projectiles/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": [
+            "com.gaura.twod_projectiles.TwoDProjectilesFabric"
+        ],
+        "modmenu": [
+            "com.gaura.twod_projectiles.config.ModMenuIntegration"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": "*",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=${java_version}"
+    }
 }

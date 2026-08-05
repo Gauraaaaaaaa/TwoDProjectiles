@@ -1,8 +1,6 @@
-package com.gaura.twod_projectiles.fabric;
+package com.gaura.twod_projectiles;
 
 import net.fabricmc.api.ClientModInitializer;
-
-import com.gaura.twod_projectiles.TwoDProjectiles;
 
 public final class TwoDProjectilesFabric implements ClientModInitializer {
 

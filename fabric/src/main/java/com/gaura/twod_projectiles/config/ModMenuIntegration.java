@@ -1,6 +1,5 @@
-package com.gaura.twod_projectiles.fabric.config;
+package com.gaura.twod_projectiles.config;
 
-import com.gaura.twod_projectiles.config.TwoDProjectilesConfig;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.autoconfig.AutoConfigClient;
